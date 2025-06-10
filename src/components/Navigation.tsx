@@ -2,15 +2,18 @@
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
+import { useLanguage } from "@/hooks/useLanguage";
+import LanguageToggle from "./LanguageToggle";
 
 const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
+  const { t } = useLanguage();
 
   const navItems = [
-    { name: "Accueil", path: "/" },
-    { name: "Catalogue", path: "/catalogue" },
-    { name: "Contact", path: "/contact" },
+    { name: t('home'), path: "/" },
+    { name: t('catalogue'), path: "/catalogue" },
+    { name: t('contact'), path: "/contact" },
   ];
 
   const isActive = (path: string) => location.pathname === path;
@@ -40,15 +43,19 @@ const Navigation = () => {
                 {item.name}
               </Link>
             ))}
+            <LanguageToggle />
           </div>
 
           {/* Mobile menu button */}
-          <button
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="md:hidden p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100"
-          >
-            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
+          <div className="md:hidden flex items-center space-x-2">
+            <LanguageToggle />
+            <button
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+            >
+              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
+          </div>
         </div>
 
         {/* Mobile Navigation */}
