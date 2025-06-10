@@ -1,11 +1,13 @@
 
 import { Card, CardContent } from "@/components/ui/card";
 import AnimatedButton from "@/components/AnimatedButton";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useLanguage } from "@/hooks/useLanguage";
+import { Eye } from "lucide-react";
 
 const FeaturedBooks = () => {
   const { t, language } = useLanguage();
+  const navigate = useNavigate();
 
   const featuredBooks = [
     {
@@ -19,7 +21,7 @@ const FeaturedBooks = () => {
       genreEn: "Essay"
     },
     {
-      id: 2,
+      id: 9,
       title: "L'Iroko : l'arbre de vie dans la mystique Vodun",
       titleEn: "The Iroko: Tree of Life in Vodun Mysticism",
       year: 2017,
@@ -39,6 +41,10 @@ const FeaturedBooks = () => {
       genreEn: "Narratives"
     }
   ];
+
+  const handleViewBook = (bookId: number) => {
+    navigate(`/book/${bookId}`);
+  };
 
   return (
     <section className="py-20 bg-gradient-to-br from-white via-blue-50/30 to-indigo-50/50 relative overflow-hidden">
@@ -66,7 +72,7 @@ const FeaturedBooks = () => {
               <div className="aspect-[3/4] bg-gradient-to-br from-blue-100 to-indigo-100 rounded-t-lg overflow-hidden relative">
                 <div className="w-full h-full flex items-center justify-center p-6">
                   <div className="text-center">
-                    <div className="w-20 h-20 bg-blue-600 rounded-full mx-auto mb-4 flex items-center justify-center">
+                    <div className="w-20 h-20 bg-blue-600 rounded-full mx-auto mb-4 flex items-center justify-center group-hover:bg-indigo-600 transition-colors duration-300">
                       <span className="text-white text-3xl font-playfair font-bold">
                         {(language === 'fr' ? book.title : book.titleEn).charAt(0)}
                       </span>
@@ -91,7 +97,12 @@ const FeaturedBooks = () => {
                   {language === 'fr' ? book.description : book.descriptionEn}
                 </p>
                 <div className="flex items-center justify-center">
-                  <AnimatedButton variant="outline" size="sm">
+                  <AnimatedButton 
+                    variant="primary" 
+                    size="sm"
+                    onClick={() => handleViewBook(book.id)}
+                  >
+                    <Eye className="w-4 h-4 mr-2" />
                     {t('learnMore')}
                   </AnimatedButton>
                 </div>
