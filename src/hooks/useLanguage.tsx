@@ -21,6 +21,12 @@ const translations = {
     heroSubtitle: 'Académicien • Écrivain • Ministre • Député',
     heroDescription: 'Découvrez l\'univers littéraire et académique du Professeur Mahougnon Kakpo, figure emblématique de la littérature africaine francophone et homme politique engagé.',
     exploreCatalogue: 'Explorer le Catalogue',
+    contactUs: 'Nous Contacter',
+    
+    // Stats
+    booksPublished: 'Livres publiés',
+    yearsTeaching: 'Années d\'enseignement',
+    readersReached: 'Lecteurs conquis',
     
     // About Section
     aboutTitle: 'À propos du Professeur',
@@ -31,6 +37,13 @@ const translations = {
     // Books Section
     featuredBooksTitle: 'Œuvres en Vedette',
     featuredBooksSubtitle: 'Découvrez quelques-unes des œuvres les plus remarquables du Professeur Kakpo',
+    learnMore: 'En savoir plus',
+    viewAllBooks: 'Voir tous les livres',
+    
+    // Catalogue
+    catalogueDescription: 'Découvrez l\'ensemble des œuvres du Professeur Mahougnon Kakpo, de ses essais académiques à ses créations littéraires.',
+    noBooksFound: 'Aucun livre trouvé',
+    tryDifferentSearch: 'Essayez de modifier vos critères de recherche ou effacez les filtres.',
     
     // Search
     searchPlaceholder: 'Rechercher par titre, genre ou année...',
@@ -64,6 +77,12 @@ const translations = {
     heroSubtitle: 'Academic • Writer • Minister • Deputy',
     heroDescription: 'Discover the literary and academic universe of Professor Mahougnon Kakpo, emblematic figure of francophone African literature and committed politician.',
     exploreCatalogue: 'Explore Catalogue',
+    contactUs: 'Contact Us',
+    
+    // Stats
+    booksPublished: 'Books published',
+    yearsTeaching: 'Years of teaching',
+    readersReached: 'Readers reached',
     
     // About Section
     aboutTitle: 'About the Professor',
@@ -74,6 +93,13 @@ const translations = {
     // Books Section
     featuredBooksTitle: 'Featured Works',
     featuredBooksSubtitle: 'Discover some of Professor Kakpo\'s most remarkable works',
+    learnMore: 'Learn more',
+    viewAllBooks: 'View all books',
+    
+    // Catalogue
+    catalogueDescription: 'Discover all the works of Professor Mahougnon Kakpo, from his academic essays to his literary creations.',
+    noBooksFound: 'No books found',
+    tryDifferentSearch: 'Try modifying your search criteria or clear the filters.',
     
     // Search
     searchPlaceholder: 'Search by title, genre or year...',

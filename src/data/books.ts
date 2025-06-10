@@ -10,7 +10,6 @@ export interface Book {
   genreEn: string;
   description: string;
   descriptionEn: string;
-  price: number;
   image: string;
   isbn?: string;
 }
@@ -27,7 +26,6 @@ export const books: Book[] = [
     genreEn: "Essay",
     description: "Une exploration accessible du système divinatoire Fá, patrimoine spirituel du Bénin. L'auteur décrypte avec pédagogie cette tradition millénaire pour la rendre compréhensible au grand public.",
     descriptionEn: "An accessible exploration of the Fa divination system, spiritual heritage of Benin. The author pedagogically deciphers this ancient tradition to make it understandable to the general public.",
-    price: 25,
     image: "/placeholder.svg"
   },
   {
@@ -41,7 +39,6 @@ export const books: Book[] = [
     genreEn: "Essay",
     description: "Étude approfondie de l'arbre Iroko dans la cosmogonie vodun. Une analyse ethnobotanique et spirituelle qui révèle l'importance de cet arbre sacré dans les traditions béninoises.",
     descriptionEn: "In-depth study of the Iroko tree in vodun cosmogony. An ethnobotanical and spiritual analysis that reveals the importance of this sacred tree in Beninese traditions.",
-    price: 22,
     image: "/placeholder.svg"
   },
   {
@@ -55,7 +52,6 @@ export const books: Book[] = [
     genreEn: "Narratives",
     description: "Recueil de récits traditionnels puisés dans la sagesse du Fá. Ces histoires sacrées transmettent les enseignements ancestraux à travers des personnages féminins emblématiques.",
     descriptionEn: "Collection of traditional tales drawn from Fa wisdom. These sacred stories transmit ancestral teachings through emblematic female characters.",
-    price: 28,
     image: "/placeholder.svg"
   },
   {
@@ -69,7 +65,6 @@ export const books: Book[] = [
     genreEn: "Theater",
     description: "Pièce théâtrale qui interroge la condition divine et humaine. Une réflexion philosophique mise en scène avec humour et profondeur sur les rapports entre divinité et humanité.",
     descriptionEn: "Theatrical play that questions the divine and human condition. A philosophical reflection staged with humor and depth on the relationship between divinity and humanity.",
-    price: 20,
     image: "/placeholder.svg"
   },
   {
@@ -83,7 +78,6 @@ export const books: Book[] = [
     genreEn: "Essay",
     description: "Analyse littéraire et anthropologique du corpus oral du Fá. L'auteur établit les bases d'une poétique spécifique à cette tradition orale béninoise.",
     descriptionEn: "Literary and anthropological analysis of the oral corpus of Fa. The author establishes the foundations of a poetics specific to this Beninese oral tradition.",
-    price: 24,
     image: "/placeholder.svg"
   },
   {
@@ -97,7 +91,6 @@ export const books: Book[] = [
     genreEn: "Literary Criticism",
     description: "Première publication majeure de l'auteur, cette étude analyse l'œuvre de Ken Bugul sous l'angle du burlesque et de la déconstruction narrative.",
     descriptionEn: "The author's first major publication, this study analyzes Ken Bugul's work from the angle of burlesque and narrative deconstruction.",
-    price: 26,
     image: "/placeholder.svg"
   },
   {
@@ -111,7 +104,6 @@ export const books: Book[] = [
     genreEn: "Anthology",
     description: "Anthologie rassemblant les voix poétiques contemporaines du Bénin. Une collection qui met en lumière la richesse et la diversité de la création poétique béninoise actuelle.",
     descriptionEn: "Anthology gathering contemporary poetic voices from Benin. A collection that highlights the richness and diversity of current Beninese poetic creation.",
-    price: 23,
     image: "/placeholder.svg"
   },
   {
@@ -125,7 +117,6 @@ export const books: Book[] = [
     genreEn: "Literary Studies",
     description: "Ouvrage collectif dirigé avec Apey Esobe Lete, explorant les enjeux linguistiques et scripturaires des littératures africaines contemporaines.",
     descriptionEn: "Collective work directed with Apey Esobe Lete, exploring the linguistic and scriptural issues of contemporary African literatures.",
-    price: 30,
     image: "/placeholder.svg"
   },
   {
@@ -139,7 +130,6 @@ export const books: Book[] = [
     genreEn: "Narratives",
     description: "Récit mystique autour de la naissance du système divinatoire Fá. Une narration captivante qui mêle mythologie et spiritualité béninoise.",
     descriptionEn: "Mystical tale around the birth of the Fa divination system. A captivating narration that blends Beninese mythology and spirituality.",
-    price: 21,
     image: "/placeholder.svg"
   },
   {
@@ -153,7 +143,6 @@ export const books: Book[] = [
     genreEn: "Literary Studies",
     description: "Panorama de la littérature béninoise contemporaine, analysant les nouvelles tendances et les jeunes auteurs qui renouvellent le paysage littéraire du pays.",
     descriptionEn: "Panorama of contemporary Beninese literature, analyzing new trends and young authors who are renewing the country's literary landscape.",
-    price: 27,
     image: "/placeholder.svg"
   }
 ];

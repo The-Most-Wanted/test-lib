@@ -24,7 +24,7 @@ const Catalogue = () => {
             {t('catalogue')}
           </h1>
           <p className="font-inter text-xl text-gray-600 max-w-3xl mx-auto">
-            Découvrez l'ensemble des œuvres du Professeur Mahougnon Kakpo, de ses essais académiques à ses créations littéraires.
+            {t('catalogueDescription')}
           </p>
         </div>
 
@@ -67,16 +67,13 @@ const Catalogue = () => {
                 </p>
               </CardContent>
               
-              <CardFooter className="pt-4 flex justify-between items-center">
-                <span className="font-inter text-2xl font-bold text-blue-600">
-                  {book.price}€
-                </span>
+              <CardFooter className="pt-4 flex justify-center">
                 <AnimatedButton 
                   variant="primary" 
                   size="sm"
                   className="px-6"
                 >
-                  Commander
+                  {t('learnMore')}
                 </AnimatedButton>
               </CardFooter>
             </Card>
@@ -87,10 +84,10 @@ const Catalogue = () => {
           <div className="text-center py-12 animate-fade-in">
             <div className="text-gray-400 text-6xl mb-4">📚</div>
             <h3 className="font-playfair text-2xl font-bold text-gray-900 mb-2">
-              Aucun livre trouvé
+              {t('noBooksFound')}
             </h3>
             <p className="font-inter text-gray-600">
-              Essayez de modifier vos critères de recherche ou effacez les filtres.
+              {t('tryDifferentSearch')}
             </p>
           </div>
         )}
