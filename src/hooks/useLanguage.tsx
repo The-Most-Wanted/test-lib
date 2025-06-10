@@ -15,6 +15,7 @@ const translations = {
     home: "Accueil",
     catalogue: "Catalogue",
     contact: "Contact",
+    navigation: "Navigation",
     
     // Hero
     heroTitle: "Prof. Mahougnon Kakpo",
@@ -30,13 +31,9 @@ const translations = {
     
     // About
     aboutTitle: "À Propos du Professeur",
-    aboutDescription: "Professeur titulaire à l'Université d'Abomey-Calavi depuis 1998, Mahougnon Kakpo est un éminent spécialiste de la littérature africaine francophone.",
-    academicCareer: "Carrière Académique",
-    academicText: "Docteur en littérature française (Bordeaux III, 1996), il dirige plusieurs laboratoires de recherche et a été fait Chevalier de l'Ordre national du Bénin en 2016.",
-    politicalCareer: "Engagement Politique",
-    politicalText: "Ancien ministre des Enseignements secondaire, technique et de la Formation professionnelle (2017-2021), député de la 9ᵉ législature et 1er secrétaire parlementaire.",
-    culturalWork: "Patrimoine Culturel",
-    culturalText: "Président du Comité des rites Vodun depuis octobre 2023, il œuvre pour la promotion du vodun comme patrimoine culturel et touristique du Bénin.",
+    aboutP1: "Professeur titulaire à l'Université d'Abomey-Calavi depuis 1998, Mahougnon Kakpo est un éminent spécialiste de la littérature africaine francophone.",
+    aboutP2: "Docteur en littérature française (Bordeaux III, 1996), il dirige plusieurs laboratoires de recherche et a été fait Chevalier de l'Ordre national du Bénin en 2016.",
+    aboutP3: "Ancien ministre des Enseignements secondaire, technique et de la Formation professionnelle (2017-2021), il œuvre pour la promotion du patrimoine culturel béninois.",
     
     // Featured Books
     featuredBooksTitle: "Œuvres Remarquables",
@@ -46,6 +43,7 @@ const translations = {
     
     // Catalogue
     catalogueDescription: "Explorez la riche collection d'œuvres du Professeur Mahougnon Kakpo, spécialiste de la littérature africaine francophone et des traditions spirituelles du Bénin.",
+    searchAndFilter: "Rechercher et Filtrer",
     searchPlaceholder: "Rechercher par titre, année ou description...",
     filterByGenre: "Filtrer par genre",
     allGenres: "Tous les genres",
@@ -61,6 +59,9 @@ const translations = {
     showAllBooks: "Afficher tous les livres",
     interestedInBooks: "Intéressé par ces ouvrages ?",
     contactForMoreInfo: "Contactez-nous pour plus d'informations sur les livres disponibles",
+    booksFound: "livres trouvés",
+    totalBooks: "Livres Total",
+    genres: "Genres",
     
     // Book Detail
     description: "Description",
@@ -91,17 +92,24 @@ const translations = {
     knightOrder: "Chevalier de l'Ordre national du Bénin (2016)",
     professorTitle: "Professeur titulaire au CAMES (2014)",
     ministerEducation: "Ancien ministre de l'Éducation (2017-2021)",
+    vodunCommittee: "Président du Comité des rites Vodun (2023)",
     exploreMore: "Explorer Plus",
     viewBooks: "Voir les Livres",
     backToHome: "Retour à l'Accueil",
     messageSent: "Message envoyé !",
     messageResponse: "Nous vous répondrons dans les plus brefs délais.",
+    
+    // Footer
+    footerDescription: "Découvrez l'univers littéraire et académique du Professeur Mahougnon Kakpo à travers ses œuvres remarquables.",
+    footerQuote: "La littérature est le miroir de l'âme d'un peuple.",
+    allRightsReserved: "Tous droits réservés.",
   },
   en: {
     // Navigation
     home: "Home",
     catalogue: "Catalogue",
     contact: "Contact",
+    navigation: "Navigation",
     
     // Hero
     heroTitle: "Prof. Mahougnon Kakpo",
@@ -117,13 +125,9 @@ const translations = {
     
     // About
     aboutTitle: "About the Professor",
-    aboutDescription: "Full Professor at the University of Abomey-Calavi since 1998, Mahougnon Kakpo is an eminent specialist in French-speaking African literature.",
-    academicCareer: "Academic Career",
-    academicText: "Doctor in French Literature (Bordeaux III, 1996), he directs several research laboratories and was made Knight of the National Order of Benin in 2016.",
-    politicalCareer: "Political Engagement",
-    politicalText: "Former Minister of Secondary, Technical and Vocational Education (2017-2021), deputy of the 9th legislature and 1st parliamentary secretary.",
-    culturalWork: "Cultural Heritage",
-    culturalText: "Chairman of the Vodun Rites Committee since October 2023, he works to promote vodun as cultural and tourist heritage of Benin.",
+    aboutP1: "Full Professor at the University of Abomey-Calavi since 1998, Mahougnon Kakpo is an eminent specialist in French-speaking African literature.",
+    aboutP2: "Doctor in French Literature (Bordeaux III, 1996), he directs several research laboratories and was made Knight of the National Order of Benin in 2016.",
+    aboutP3: "Former Minister of Secondary, Technical and Vocational Education (2017-2021), he works to promote Beninese cultural heritage.",
     
     // Featured Books
     featuredBooksTitle: "Remarkable Works",
@@ -133,6 +137,7 @@ const translations = {
     
     // Catalogue
     catalogueDescription: "Explore the rich collection of works by Professor Mahougnon Kakpo, specialist in French-speaking African literature and spiritual traditions of Benin.",
+    searchAndFilter: "Search and Filter",
     searchPlaceholder: "Search by title, year or description...",
     filterByGenre: "Filter by genre",
     allGenres: "All genres",
@@ -148,6 +153,9 @@ const translations = {
     showAllBooks: "Show all books",
     interestedInBooks: "Interested in these works?",
     contactForMoreInfo: "Contact us for more information about available books",
+    booksFound: "books found",
+    totalBooks: "Total Books",
+    genres: "Genres",
     
     // Book Detail
     description: "Description",
@@ -178,11 +186,17 @@ const translations = {
     knightOrder: "Knight of the National Order of Benin (2016)",
     professorTitle: "Full Professor at CAMES (2014)",
     ministerEducation: "Former Minister of Education (2017-2021)",
+    vodunCommittee: "Chairman of the Vodun Rites Committee (2023)",
     exploreMore: "Explore More",
     viewBooks: "View Books",
     backToHome: "Back to Home",
     messageSent: "Message sent!",
     messageResponse: "We will respond to you as soon as possible.",
+    
+    // Footer
+    footerDescription: "Discover the literary and academic universe of Professor Mahougnon Kakpo through his remarkable works.",
+    footerQuote: "Literature is the mirror of a people's soul.",
+    allRightsReserved: "All rights reserved.",
   }
 };
 

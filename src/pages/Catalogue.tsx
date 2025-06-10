@@ -3,18 +3,75 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
-import SearchEngine from "@/components/SearchEngine";
 import FloatingElements from "@/components/FloatingElements";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import AnimatedButton from "@/components/AnimatedButton";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useLanguage } from "@/hooks/useLanguage";
 import { books as allBooks, Book } from "@/data/books";
-import { BookOpen, Calendar, Eye } from "lucide-react";
+import { BookOpen, Calendar, Search, Filter, Sparkles, Eye, Building } from "lucide-react";
 
 const Catalogue = () => {
   const { t, language } = useLanguage();
   const navigate = useNavigate();
   const [filteredBooks, setFilteredBooks] = useState<Book[]>(allBooks);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedGenre, setSelectedGenre] = useState("all");
+  const [sortBy, setSortBy] = useState("title-asc");
+
+  const genres = [...new Set(allBooks.map(book => language === 'fr' ? book.genre : book.genreEn))];
+
+  const filterAndSortBooks = (term: string, genre: string, sort: string) => {
+    let filtered = allBooks.filter(book => {
+      const title = language === 'fr' ? book.title : book.titleEn;
+      const bookGenre = language === 'fr' ? book.genre : book.genreEn;
+      const description = language === 'fr' ? book.description : book.descriptionEn;
+      
+      const matchesSearch = term === "" || 
+        title.toLowerCase().includes(term.toLowerCase()) ||
+        book.year.toString().includes(term) ||
+        description.toLowerCase().includes(term.toLowerCase());
+      
+      const matchesGenre = genre === "all" || bookGenre === genre;
+      
+      return matchesSearch && matchesGenre;
+    });
+
+    filtered.sort((a, b) => {
+      const aTitle = language === 'fr' ? a.title : a.titleEn;
+      const bTitle = language === 'fr' ? b.title : b.titleEn;
+      
+      switch (sort) {
+        case "title-asc":
+          return aTitle.localeCompare(bTitle);
+        case "title-desc":
+          return bTitle.localeCompare(aTitle);
+        case "year-asc":
+          return a.year - b.year;
+        case "year-desc":
+          return b.year - a.year;
+        default:
+          return 0;
+      }
+    });
+
+    setFilteredBooks(filtered);
+  };
+
+  const handleSearch = (term: string) => {
+    setSearchTerm(term);
+    filterAndSortBooks(term, selectedGenre, sortBy);
+  };
+
+  const handleGenreChange = (genre: string) => {
+    setSelectedGenre(genre);
+    filterAndSortBooks(searchTerm, genre, sortBy);
+  };
+
+  const handleSortChange = (sort: string) => {
+    setSortBy(sort);
+    filterAndSortBooks(searchTerm, selectedGenre, sort);
+  };
 
   const handleViewBook = (bookId: number) => {
     navigate(`/book/${bookId}`);
@@ -29,32 +86,123 @@ const Catalogue = () => {
       <div className="relative z-10 bg-gradient-to-r from-blue-900 via-indigo-900 to-purple-900 text-white py-20">
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1481627834876-b7833e8f5570')] bg-cover bg-center bg-no-repeat opacity-10"></div>
         <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="font-playfair text-5xl sm:text-6xl font-bold mb-6 animate-fade-in">
-            {t('catalogue')}
-          </h1>
-          <p className="font-inter text-xl text-blue-100 max-w-3xl mx-auto leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s' }}>
-            {t('catalogueDescription')}
-          </p>
-          <div className="mt-8 w-32 h-1 bg-gradient-to-r from-yellow-400 to-orange-400 mx-auto rounded-full animate-fade-in" style={{ animationDelay: '0.4s' }}></div>
+          <div className="animate-fade-in">
+            <div className="inline-flex items-center bg-white/10 backdrop-blur-md rounded-full px-6 py-2 mb-6">
+              <BookOpen className="w-5 h-5 mr-2 text-yellow-400" />
+              <span className="text-yellow-400 font-semibold">{t('catalogue')}</span>
+            </div>
+            <h1 className="font-playfair text-5xl sm:text-6xl font-bold mb-6">
+              {t('catalogue')}
+            </h1>
+            <p className="font-inter text-xl text-blue-100 max-w-3xl mx-auto leading-relaxed mb-8">
+              {t('catalogueDescription')}
+            </p>
+            <div className="flex justify-center space-x-8 text-sm">
+              <div className="text-center">
+                <div className="text-2xl font-bold text-yellow-400">{allBooks.length}</div>
+                <div className="text-blue-200">{t('totalBooks')}</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl font-bold text-yellow-400">{genres.length}</div>
+                <div className="text-blue-200">{t('genres')}</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl font-bold text-yellow-400">25+</div>
+                <div className="text-blue-200">{t('yearsTeaching')}</div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
       <main className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <SearchEngine books={allBooks} onFilteredBooks={setFilteredBooks} />
+        {/* Enhanced Search Section */}
+        <div className="bg-white/80 backdrop-blur-md rounded-2xl shadow-2xl p-8 mb-12 border border-white/20 animate-fade-in">
+          <div className="flex items-center mb-6">
+            <Search className="w-6 h-6 text-blue-600 mr-3" />
+            <h2 className="font-playfair text-2xl font-bold text-gray-900">{t('searchAndFilter')}</h2>
+          </div>
+          
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+            {/* Search Input */}
+            <div className="lg:col-span-2 relative">
+              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+              <Input
+                type="text"
+                placeholder={t('searchPlaceholder')}
+                value={searchTerm}
+                onChange={(e) => handleSearch(e.target.value)}
+                className="pl-12 h-14 border-2 border-gray-200 focus:border-blue-500 rounded-xl text-lg"
+              />
+            </div>
+
+            {/* Genre Filter */}
+            <div className="relative">
+              <Filter className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5 z-10" />
+              <Select value={selectedGenre} onValueChange={handleGenreChange}>
+                <SelectTrigger className="h-14 pl-12 border-2 border-gray-200 focus:border-blue-500 rounded-xl text-lg">
+                  <SelectValue placeholder={t('filterByGenre')} />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">{t('allGenres')}</SelectItem>
+                  {genres.map((genre) => (
+                    <SelectItem key={genre} value={genre}>
+                      {genre}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Sort */}
+            <Select value={sortBy} onValueChange={handleSortChange}>
+              <SelectTrigger className="h-14 border-2 border-gray-200 focus:border-blue-500 rounded-xl text-lg">
+                <SelectValue placeholder={t('sortBy')} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="title-asc">{t('titleAsc')}</SelectItem>
+                <SelectItem value="title-desc">{t('titleDesc')}</SelectItem>
+                <SelectItem value="year-asc">{t('yearAsc')}</SelectItem>
+                <SelectItem value="year-desc">{t('yearDesc')}</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Results Summary */}
+          <div className="mt-6 flex items-center justify-between">
+            <p className="text-gray-600">
+              <span className="font-bold text-blue-600">{filteredBooks.length}</span> {t('booksFound')}
+            </p>
+            {(searchTerm || selectedGenre !== "all") && (
+              <button
+                onClick={() => {
+                  setSearchTerm("");
+                  setSelectedGenre("all");
+                  setSortBy("title-asc");
+                  setFilteredBooks(allBooks);
+                }}
+                className="text-blue-600 hover:text-blue-800 font-medium transition-colors"
+              >
+                {t('clearFilters')}
+              </button>
+            )}
+          </div>
+        </div>
 
         {/* Books Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
           {filteredBooks.map((book, index) => (
             <Card 
               key={book.id} 
-              className="group hover:shadow-2xl transition-all duration-700 transform hover:-translate-y-4 bg-white/90 backdrop-blur-md border-0 shadow-xl hover:shadow-blue-200/50 overflow-hidden animate-fade-in"
+              className="group hover:shadow-2xl transition-all duration-700 transform hover:-translate-y-4 bg-white/95 backdrop-blur-md border-0 shadow-xl hover:shadow-blue-200/50 overflow-hidden animate-fade-in cursor-pointer"
               style={{ animationDelay: `${index * 0.1}s` }}
+              onClick={() => handleViewBook(book.id)}
             >
               <CardHeader className="pb-4">
                 <div className="aspect-[3/4] bg-gradient-to-br from-blue-100 to-indigo-100 rounded-xl mb-4 overflow-hidden relative group-hover:scale-105 transition-transform duration-500">
                   <div className="w-full h-full flex items-center justify-center p-6">
                     <div className="text-center">
-                      <div className="w-20 h-20 bg-blue-600 rounded-full mx-auto mb-4 flex items-center justify-center shadow-lg group-hover:bg-indigo-600 transition-colors duration-300">
+                      <div className="w-20 h-20 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full mx-auto mb-4 flex items-center justify-center shadow-lg group-hover:from-indigo-600 group-hover:to-purple-600 transition-all duration-500">
                         <span className="text-white text-2xl font-playfair font-bold">
                           {(language === 'fr' ? book.title : book.titleEn).charAt(0)}
                         </span>
@@ -65,7 +213,7 @@ const Catalogue = () => {
                     </div>
                   </div>
                   <div className="absolute inset-0 bg-gradient-to-t from-blue-900/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                  <div className="absolute top-4 right-4 bg-yellow-400 text-gray-900 px-3 py-1 rounded-full text-sm font-bold opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-y-2 group-hover:translate-y-0">
+                  <div className="absolute top-4 right-4 bg-gradient-to-r from-yellow-400 to-orange-400 text-gray-900 px-3 py-1 rounded-full text-sm font-bold opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-y-2 group-hover:translate-y-0 shadow-lg">
                     {book.year}
                   </div>
                 </div>
@@ -86,21 +234,26 @@ const Catalogue = () => {
                 </p>
                 
                 <div className="flex items-center gap-2 text-xs text-gray-500 font-inter">
-                  <BookOpen className="w-4 h-4" />
+                  <Building className="w-4 h-4" />
                   {language === 'fr' ? book.publisher : book.publisherEn}
                 </div>
               </CardContent>
               
               <CardFooter className="pt-4 flex justify-center">
-                <AnimatedButton 
-                  variant="primary" 
-                  size="sm"
-                  className="px-6 group-hover:scale-105 transition-transform duration-300"
-                  onClick={() => handleViewBook(book.id)}
+                <button
+                  className="group/btn relative overflow-hidden bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-700 hover:via-indigo-700 hover:to-purple-700 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleViewBook(book.id);
+                  }}
                 >
-                  <Eye className="w-4 h-4 mr-2" />
-                  {t('learnMore')}
-                </AnimatedButton>
+                  <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300"></div>
+                  <div className="relative flex items-center space-x-2">
+                    <Sparkles className="w-4 h-4 animate-pulse" />
+                    <span>{t('learnMore')}</span>
+                    <Eye className="w-4 h-4 group-hover/btn:scale-110 transition-transform duration-300" />
+                  </div>
+                </button>
               </CardFooter>
             </Card>
           ))}
@@ -116,30 +269,35 @@ const Catalogue = () => {
             <p className="font-inter text-xl text-gray-600 mb-8">
               {t('tryDifferentSearch')}
             </p>
-            <AnimatedButton 
-              variant="primary" 
-              onClick={() => setFilteredBooks(allBooks)}
+            <button
+              onClick={() => {
+                setSearchTerm("");
+                setSelectedGenre("all");
+                setSortBy("title-asc");
+                setFilteredBooks(allBooks);
+              }}
+              className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold py-3 px-8 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg"
             >
               {t('showAllBooks')}
-            </AnimatedButton>
+            </button>
           </div>
         )}
 
         {/* Call to Action */}
-        <div className="mt-20 text-center bg-gradient-to-r from-blue-600 to-indigo-600 rounded-3xl p-12 text-white animate-fade-in">
+        <div className="mt-20 text-center bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 rounded-3xl p-12 text-white animate-fade-in shadow-2xl">
+          <Sparkles className="w-16 h-16 mx-auto mb-6 text-yellow-400" />
           <h2 className="font-playfair text-3xl font-bold mb-4">
             {t('interestedInBooks')}
           </h2>
           <p className="font-inter text-lg mb-8 opacity-90">
             {t('contactForMoreInfo')}
           </p>
-          <AnimatedButton 
-            variant="secondary" 
-            size="lg"
+          <button
             onClick={() => navigate('/contact')}
+            className="bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white font-bold py-4 px-12 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-xl"
           >
             {t('contactUs')}
-          </AnimatedButton>
+          </button>
         </div>
       </main>
       
