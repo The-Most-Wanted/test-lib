@@ -46,6 +46,7 @@ const FeaturedBooks = () => {
     if (error) {
       console.error('Error loading featured books:', error);
     } else {
+      console.log('Featured books loaded:', data);
       setFeaturedBooks(data || []);
     }
     setLoading(false);
@@ -82,7 +83,7 @@ const FeaturedBooks = () => {
     return (
       <section className="py-20 bg-gradient-to-br from-white via-blue-50/30 to-indigo-50/50">
         <div className="max-w-6xl mx-auto px-4 text-center">
-          <p>Chargement des livres en vedette...</p>
+          <p className="text-gray-600">Chargement des livres en vedette...</p>
         </div>
       </section>
     );
@@ -157,7 +158,7 @@ const FeaturedBooks = () => {
                   <Button
                     onClick={() => handleAddToCart(book)}
                     disabled={book.stock_quantity <= 0}
-                    className="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 px-4 py-3"
+                    className="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 px-4 py-3 font-semibold"
                   >
                     <ShoppingCart className="w-4 h-4" />
                   </Button>
@@ -181,7 +182,7 @@ const FeaturedBooks = () => {
 
         <div className="text-center animate-fade-in">
           <Link to="/catalogue">
-            <Button className="text-lg px-12 py-4 bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 shadow-xl">
+            <Button className="text-lg px-12 py-4 bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 shadow-xl font-semibold">
               <BookOpen className="w-5 h-5 mr-2" />
               {t('viewAllBooks')}
             </Button>

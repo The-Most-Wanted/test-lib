@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
@@ -8,24 +8,68 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useLanguage } from "@/hooks/useLanguage";
-import { books as allBooks, Book } from "@/data/books";
+import { supabase } from "@/integrations/supabase/client";
 import { BookOpen, Calendar, Search, Filter, Sparkles, Eye, Building } from "lucide-react";
+
+interface Book {
+  id: number;
+  title: string;
+  title_en: string;
+  year: number;
+  publisher: string;
+  publisher_en: string;
+  genre: string;
+  genre_en: string;
+  description: string;
+  description_en: string;
+  price: number;
+  stock_quantity: number;
+  featured?: boolean;
+}
 
 const Catalogue = () => {
   const { t, language } = useLanguage();
   const navigate = useNavigate();
-  const [filteredBooks, setFilteredBooks] = useState<Book[]>(allBooks);
+  const [allBooks, setAllBooks] = useState<Book[]>([]);
+  const [filteredBooks, setFilteredBooks] = useState<Book[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedGenre, setSelectedGenre] = useState("all");
   const [sortBy, setSortBy] = useState("title-asc");
+  const [loading, setLoading] = useState(true);
 
-  const genres = [...new Set(allBooks.map(book => language === 'fr' ? book.genre : book.genreEn))];
+  useEffect(() => {
+    loadBooks();
+  }, []);
+
+  const loadBooks = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('books')
+        .select('*')
+        .eq('active', true)
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        console.error('Error loading books:', error);
+      } else {
+        console.log('Loaded books:', data);
+        setAllBooks(data || []);
+        setFilteredBooks(data || []);
+      }
+    } catch (error) {
+      console.error('Error loading books:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const genres = [...new Set(allBooks.map(book => language === 'fr' ? book.genre : book.genre_en))];
 
   const filterAndSortBooks = (term: string, genre: string, sort: string) => {
     let filtered = allBooks.filter(book => {
-      const title = language === 'fr' ? book.title : book.titleEn;
-      const bookGenre = language === 'fr' ? book.genre : book.genreEn;
-      const description = language === 'fr' ? book.description : book.descriptionEn;
+      const title = language === 'fr' ? book.title : book.title_en;
+      const bookGenre = language === 'fr' ? book.genre : book.genre_en;
+      const description = language === 'fr' ? book.description : book.description_en;
       
       const matchesSearch = term === "" || 
         title.toLowerCase().includes(term.toLowerCase()) ||
@@ -38,8 +82,8 @@ const Catalogue = () => {
     });
 
     filtered.sort((a, b) => {
-      const aTitle = language === 'fr' ? a.title : a.titleEn;
-      const bTitle = language === 'fr' ? b.title : b.titleEn;
+      const aTitle = language === 'fr' ? a.title : a.title_en;
+      const bTitle = language === 'fr' ? b.title : b.title_en;
       
       switch (sort) {
         case "title-asc":
@@ -76,6 +120,27 @@ const Catalogue = () => {
   const handleViewBook = (bookId: number) => {
     navigate(`/book/${bookId}`);
   };
+
+  const formatPrice = (price: number) => {
+    return new Intl.NumberFormat('fr-FR', {
+      style: 'currency',
+      currency: 'XOF',
+      minimumFractionDigits: 0,
+    }).format(price);
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50/50 via-white to-indigo-50/50 font-inter relative overflow-hidden">
+        <FloatingElements />
+        <Navigation />
+        <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">
+          <p className="text-xl text-gray-600">Chargement des livres...</p>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50/50 via-white to-indigo-50/50 font-inter relative overflow-hidden">
@@ -204,11 +269,11 @@ const Catalogue = () => {
                     <div className="text-center">
                       <div className="w-20 h-20 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full mx-auto mb-4 flex items-center justify-center shadow-lg group-hover:from-indigo-600 group-hover:to-purple-600 transition-all duration-500">
                         <span className="text-white text-2xl font-playfair font-bold">
-                          {(language === 'fr' ? book.title : book.titleEn).charAt(0)}
+                          {(language === 'fr' ? book.title : book.title_en).charAt(0)}
                         </span>
                       </div>
                       <h3 className="text-blue-800 font-playfair font-bold text-lg leading-tight px-2">
-                        {language === 'fr' ? book.title : book.titleEn}
+                        {language === 'fr' ? book.title : book.title_en}
                       </h3>
                     </div>
                   </div>
@@ -219,24 +284,41 @@ const Catalogue = () => {
                 </div>
                 
                 <CardTitle className="font-playfair text-xl font-bold text-gray-900 line-clamp-2 group-hover:text-blue-600 transition-colors">
-                  {language === 'fr' ? book.title : book.titleEn}
+                  {language === 'fr' ? book.title : book.title_en}
                 </CardTitle>
                 
                 <CardDescription className="font-inter text-gray-600 flex items-center gap-2">
                   <Calendar className="w-4 h-4" />
-                  {book.year} • {language === 'fr' ? book.genre : book.genreEn}
+                  {book.year} • {language === 'fr' ? book.genre : book.genre_en}
                 </CardDescription>
               </CardHeader>
               
               <CardContent className="py-2">
                 <p className="font-inter text-gray-700 text-sm line-clamp-3 mb-4 leading-relaxed">
-                  {language === 'fr' ? book.description : book.descriptionEn}
+                  {language === 'fr' ? book.description : book.description_en}
                 </p>
                 
-                <div className="flex items-center gap-2 text-xs text-gray-500 font-inter">
-                  <Building className="w-4 h-4" />
-                  {language === 'fr' ? book.publisher : book.publisherEn}
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-2 text-xs text-gray-500 font-inter">
+                    <Building className="w-4 h-4" />
+                    {language === 'fr' ? book.publisher : book.publisher_en}
+                  </div>
+                  <div className="text-lg font-bold text-green-600">
+                    {formatPrice(book.price)}
+                  </div>
                 </div>
+
+                {book.stock_quantity <= 5 && book.stock_quantity > 0 && (
+                  <p className="text-orange-600 text-xs font-medium">
+                    Plus que {book.stock_quantity} en stock !
+                  </p>
+                )}
+                
+                {book.stock_quantity <= 0 && (
+                  <p className="text-red-600 text-xs font-semibold">
+                    Rupture de stock
+                  </p>
+                )}
               </CardContent>
               
               <CardFooter className="pt-4 flex justify-center">
@@ -260,7 +342,7 @@ const Catalogue = () => {
         </div>
 
         {/* No Books Found */}
-        {filteredBooks.length === 0 && (
+        {filteredBooks.length === 0 && !loading && (
           <div className="text-center py-20 animate-fade-in">
             <div className="text-gray-300 text-8xl mb-6">📚</div>
             <h3 className="font-playfair text-3xl font-bold text-gray-900 mb-4">
