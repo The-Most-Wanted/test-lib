@@ -1,50 +1,92 @@
 
+import { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
-import AnimatedButton from "@/components/AnimatedButton";
+import { Button } from "@/components/ui/button";
 import { Link, useNavigate } from "react-router-dom";
 import { useLanguage } from "@/hooks/useLanguage";
-import { Eye, BookOpen, Sparkles } from "lucide-react";
+import { useCart } from "@/contexts/CartContext";
+import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
+import { Eye, BookOpen, Sparkles, ShoppingCart } from "lucide-react";
+import { toast } from "sonner";
+
+interface Book {
+  id: number;
+  title: string;
+  title_en: string;
+  year: number;
+  description: string;
+  description_en: string;
+  genre: string;
+  genre_en: string;
+  price: number;
+  stock_quantity: number;
+}
 
 const FeaturedBooks = () => {
   const { t, language } = useLanguage();
+  const { addToCart } = useCart();
+  const { user } = useAuth();
   const navigate = useNavigate();
+  const [featuredBooks, setFeaturedBooks] = useState<Book[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const featuredBooks = [
-    {
-      id: 1,
-      title: "Le Fá expliqué aux profanes",
-      titleEn: "Fa Explained to the Uninitiated",
-      year: 2021,
-      description: "Une exploration accessible du système divinatoire Fá, patrimoine spirituel du Bénin.",
-      descriptionEn: "An accessible exploration of the Fa divination system, spiritual heritage of Benin.",
-      genre: "Essai",
-      genreEn: "Essay"
-    },
-    {
-      id: 9,
-      title: "L'Iroko : l'arbre de vie dans la mystique Vodun",
-      titleEn: "The Iroko: Tree of Life in Vodun Mysticism",
-      year: 2017,
-      description: "Étude approfondie de l'arbre Iroko dans la cosmogonie vodun et son importance spirituelle.",
-      descriptionEn: "In-depth study of the Iroko tree in vodun cosmogony and its spiritual importance.",
-      genre: "Essai",
-      genreEn: "Essay"
-    },
-    {
-      id: 3,
-      title: "Les épouses de Fa : récits de la parole sacrée du Bénin",
-      titleEn: "The Wives of Fa: Tales of Sacred Words from Benin",
-      year: 2007,
-      description: "Recueil de récits traditionnels puisés dans la sagesse du Fá.",
-      descriptionEn: "Collection of traditional tales drawn from Fa wisdom.",
-      genre: "Récits",
-      genreEn: "Narratives"
+  useEffect(() => {
+    loadFeaturedBooks();
+  }, []);
+
+  const loadFeaturedBooks = async () => {
+    const { data, error } = await supabase
+      .from('books')
+      .select('*')
+      .eq('featured', true)
+      .eq('active', true)
+      .limit(3);
+
+    if (error) {
+      console.error('Error loading featured books:', error);
+    } else {
+      setFeaturedBooks(data || []);
     }
-  ];
+    setLoading(false);
+  };
 
   const handleViewBook = (bookId: number) => {
     navigate(`/book/${bookId}`);
   };
+
+  const handleAddToCart = async (book: Book) => {
+    if (!user) {
+      toast.error('Veuillez vous connecter pour ajouter au panier');
+      navigate('/auth');
+      return;
+    }
+
+    if (book.stock_quantity <= 0) {
+      toast.error('Ce livre est en rupture de stock');
+      return;
+    }
+
+    await addToCart(book.id);
+  };
+
+  const formatPrice = (price: number) => {
+    return new Intl.NumberFormat('fr-FR', {
+      style: 'currency',
+      currency: 'XOF',
+      minimumFractionDigits: 0,
+    }).format(price);
+  };
+
+  if (loading) {
+    return (
+      <section className="py-20 bg-gradient-to-br from-white via-blue-50/30 to-indigo-50/50">
+        <div className="max-w-6xl mx-auto px-4 text-center">
+          <p>Chargement des livres en vedette...</p>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="py-20 bg-gradient-to-br from-white via-blue-50/30 to-indigo-50/50 relative overflow-hidden">
@@ -74,11 +116,11 @@ const FeaturedBooks = () => {
                   <div className="text-center">
                     <div className="w-20 h-20 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full mx-auto mb-4 flex items-center justify-center group-hover:from-indigo-600 group-hover:to-purple-600 transition-all duration-500 shadow-lg">
                       <span className="text-white text-3xl font-playfair font-bold">
-                        {(language === 'fr' ? book.title : book.titleEn).charAt(0)}
+                        {(language === 'fr' ? book.title : book.title_en).charAt(0)}
                       </span>
                     </div>
                     <h3 className="text-blue-800 font-playfair font-bold text-lg leading-tight px-2">
-                      {language === 'fr' ? book.title : book.titleEn}
+                      {language === 'fr' ? book.title : book.title_en}
                     </h3>
                   </div>
                 </div>
@@ -88,29 +130,50 @@ const FeaturedBooks = () => {
                 </div>
               </div>
               <CardContent className="p-6">
-                <div className="mb-3">
+                <div className="mb-3 flex items-center justify-between">
                   <span className="inline-block bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium border border-blue-200">
                     <BookOpen className="w-3 h-3 inline mr-1" />
-                    {language === 'fr' ? book.genre : book.genreEn}
+                    {language === 'fr' ? book.genre : book.genre_en}
+                  </span>
+                  <span className="text-2xl font-bold text-green-600">
+                    {formatPrice(book.price)}
                   </span>
                 </div>
                 <p className="font-inter text-gray-600 mb-6 text-sm leading-relaxed">
-                  {language === 'fr' ? book.description : book.descriptionEn}
+                  {language === 'fr' ? book.description : book.description_en}
                 </p>
-                <div className="flex items-center justify-center">
+                <div className="flex items-center justify-between gap-2">
                   <button
                     onClick={() => handleViewBook(book.id)}
-                    className="group/btn relative overflow-hidden bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-700 hover:via-indigo-700 hover:to-purple-700 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-xl shadow-lg"
+                    className="flex-1 group/btn relative overflow-hidden bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-700 hover:via-indigo-700 hover:to-purple-700 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-xl shadow-lg"
                   >
                     <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300"></div>
-                    <div className="relative flex items-center space-x-2">
-                      <Sparkles className="w-4 h-4 animate-pulse" />
-                      <span>{t('learnMore')}</span>
-                      <Eye className="w-4 h-4 group-hover/btn:scale-110 transition-transform duration-300" />
+                    <div className="relative flex items-center justify-center space-x-2">
+                      <Eye className="w-4 h-4" />
+                      <span className="text-sm">{t('learnMore')}</span>
                     </div>
-                    <div className="absolute inset-0 border-2 border-white/30 rounded-xl opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300"></div>
                   </button>
+                  
+                  <Button
+                    onClick={() => handleAddToCart(book)}
+                    disabled={book.stock_quantity <= 0}
+                    className="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 px-4 py-3"
+                  >
+                    <ShoppingCart className="w-4 h-4" />
+                  </Button>
                 </div>
+                
+                {book.stock_quantity <= 5 && book.stock_quantity > 0 && (
+                  <p className="text-orange-600 text-sm mt-2 text-center">
+                    Plus que {book.stock_quantity} en stock !
+                  </p>
+                )}
+                
+                {book.stock_quantity <= 0 && (
+                  <p className="text-red-600 text-sm mt-2 text-center font-semibold">
+                    Rupture de stock
+                  </p>
+                )}
               </CardContent>
             </Card>
           ))}
@@ -118,10 +181,10 @@ const FeaturedBooks = () => {
 
         <div className="text-center animate-fade-in">
           <Link to="/catalogue">
-            <AnimatedButton variant="primary" size="lg" className="text-lg px-12 py-4 bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 shadow-xl">
+            <Button className="text-lg px-12 py-4 bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 shadow-xl">
               <BookOpen className="w-5 h-5 mr-2" />
               {t('viewAllBooks')}
-            </AnimatedButton>
+            </Button>
           </Link>
         </div>
       </div>
