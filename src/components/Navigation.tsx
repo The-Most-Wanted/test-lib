@@ -1,10 +1,9 @@
-
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import { useCart } from "@/contexts/CartContext";
 import { useLanguage } from "@/hooks/useLanguage";
 import LanguageToggle from "@/components/LanguageToggle";
-import CartIcon from "@/components/CartIcon";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -18,8 +17,10 @@ import { LogIn, LogOut, Menu, User, X, ChevronDown, ShoppingCart } from "lucide-
 
 const Navigation = () => {
   const { user, signOut } = useAuth();
+  const { getTotalItems } = useCart();
   const { t } = useLanguage();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const totalItems = getTotalItems();
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md shadow-lg border-b border-gray-200/50">
@@ -64,48 +65,59 @@ const Navigation = () => {
           <div className="flex items-center space-x-3">
             <LanguageToggle />
             
+            {/* Cart Icon - Always visible when user is logged in */}
+            {user && (
+              <Link to="/cart">
+                <Button variant="ghost" size="icon" className="relative hover:bg-blue-50 transition-colors">
+                  <ShoppingCart className="h-5 w-5 text-gray-700" />
+                  {totalItems > 0 && (
+                    <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold min-w-[20px]">
+                      {totalItems}
+                    </span>
+                  )}
+                </Button>
+              </Link>
+            )}
+            
             {user ? (
-              <>
-                <CartIcon />
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button 
-                      variant="ghost" 
-                      className="flex items-center space-x-2 hover:bg-blue-50 border border-transparent hover:border-blue-200 transition-all duration-300 rounded-xl px-4 py-2"
-                    >
-                      <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full flex items-center justify-center">
-                        <User className="w-4 h-4 text-white" />
-                      </div>
-                      <span className="hidden sm:block font-medium text-gray-700">{t('profile')}</span>
-                      <ChevronDown className="w-4 h-4 text-gray-500" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="w-56 bg-white/95 backdrop-blur-md border border-gray-200/50 shadow-xl">
-                    <DropdownMenuLabel className="text-gray-900">{t('myAccount')}</DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem asChild>
-                      <Link to="/profile" className="flex items-center space-x-2 cursor-pointer hover:bg-blue-50 transition-colors">
-                        <User className="w-4 h-4" />
-                        <span>{t('manageProfile')}</span>
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                      <Link to="/cart" className="flex items-center space-x-2 cursor-pointer hover:bg-blue-50 transition-colors">
-                        <ShoppingCart className="w-4 h-4" />
-                        <span>{t('myCart')}</span>
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem 
-                      onClick={() => signOut()}
-                      className="flex items-center space-x-2 cursor-pointer text-red-600 hover:bg-red-50 transition-colors"
-                    >
-                      <LogOut className="w-4 h-4" />
-                      <span>{t('logout')}</span>
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button 
+                    variant="ghost" 
+                    className="flex items-center space-x-2 hover:bg-blue-50 border border-transparent hover:border-blue-200 transition-all duration-300 rounded-xl px-4 py-2"
+                  >
+                    <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full flex items-center justify-center">
+                      <User className="w-4 h-4 text-white" />
+                    </div>
+                    <span className="hidden sm:block font-medium text-gray-700">{t('profile')}</span>
+                    <ChevronDown className="w-4 h-4 text-gray-500" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56 bg-white/95 backdrop-blur-md border border-gray-200/50 shadow-xl">
+                  <DropdownMenuLabel className="text-gray-900">{t('myAccount')}</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild>
+                    <Link to="/profile" className="flex items-center space-x-2 cursor-pointer hover:bg-blue-50 transition-colors">
+                      <User className="w-4 h-4" />
+                      <span>{t('manageProfile')}</span>
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link to="/cart" className="flex items-center space-x-2 cursor-pointer hover:bg-blue-50 transition-colors">
+                      <ShoppingCart className="w-4 h-4" />
+                      <span>{t('myCart')}</span>
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem 
+                    onClick={() => signOut()}
+                    className="flex items-center space-x-2 cursor-pointer text-red-600 hover:bg-red-50 transition-colors"
+                  >
+                    <LogOut className="w-4 h-4" />
+                    <span>{t('logout')}</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             ) : (
               <Link to="/auth">
                 <Button className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold px-6 py-2 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
@@ -164,10 +176,15 @@ const Navigation = () => {
                   </Link>
                   <Link 
                     to="/cart" 
-                    className="block text-gray-700 hover:text-blue-600 font-medium py-2 transition-colors"
+                    className="flex items-center justify-between text-gray-700 hover:text-blue-600 font-medium py-2 transition-colors"
                     onClick={() => setIsMenuOpen(false)}
                   >
-                    {t('myCart')}
+                    <span>{t('myCart')}</span>
+                    {totalItems > 0 && (
+                      <span className="bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">
+                        {totalItems}
+                      </span>
+                    )}
                   </Link>
                   <button 
                     onClick={() => {

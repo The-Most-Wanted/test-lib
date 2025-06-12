@@ -1,4 +1,3 @@
-
 import { ShoppingCart } from 'lucide-react';
 import { useCart } from '@/contexts/CartContext';
 import { useAuth } from '@/contexts/AuthContext';
@@ -14,10 +13,10 @@ const CartIcon = () => {
 
   return (
     <Link to="/cart">
-      <Button variant="secondary" size="icon" className="relative bg-white/10 hover:bg-white/20 border-white/20 text-white">
-        <ShoppingCart className="h-5 w-5" />
+      <Button variant="ghost" size="icon" className="relative hover:bg-blue-50 transition-colors">
+        <ShoppingCart className="h-5 w-5 text-gray-700" />
         {totalItems > 0 && (
-          <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center font-bold">
+          <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold min-w-[20px]">
             {totalItems}
           </span>
         )}
