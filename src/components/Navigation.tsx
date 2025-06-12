@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
@@ -14,10 +15,6 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button";
 import { LogIn, LogOut, Menu, User, X, ChevronDown, ShoppingCart } from "lucide-react";
-
-interface NavigationProps {
-  // Add any props here
-}
 
 const Navigation = () => {
   const { user, signOut } = useAuth();
@@ -64,7 +61,7 @@ const Navigation = () => {
           </div>
 
           {/* Right Side Items */}
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-3">
             <LanguageToggle />
             
             {user ? (
@@ -79,23 +76,23 @@ const Navigation = () => {
                       <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full flex items-center justify-center">
                         <User className="w-4 h-4 text-white" />
                       </div>
-                      <span className="hidden sm:block font-medium text-gray-700">Profil</span>
+                      <span className="hidden sm:block font-medium text-gray-700">{t('profile')}</span>
                       <ChevronDown className="w-4 h-4 text-gray-500" />
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end" className="w-56 bg-white/95 backdrop-blur-md border border-gray-200/50 shadow-xl">
-                    <DropdownMenuLabel className="text-gray-900">Mon compte</DropdownMenuLabel>
+                    <DropdownMenuLabel className="text-gray-900">{t('myAccount')}</DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem asChild>
                       <Link to="/profile" className="flex items-center space-x-2 cursor-pointer hover:bg-blue-50 transition-colors">
                         <User className="w-4 h-4" />
-                        <span>Gérer mon profil</span>
+                        <span>{t('manageProfile')}</span>
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
                       <Link to="/cart" className="flex items-center space-x-2 cursor-pointer hover:bg-blue-50 transition-colors">
                         <ShoppingCart className="w-4 h-4" />
-                        <span>Mon panier</span>
+                        <span>{t('myCart')}</span>
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
@@ -104,7 +101,7 @@ const Navigation = () => {
                       className="flex items-center space-x-2 cursor-pointer text-red-600 hover:bg-red-50 transition-colors"
                     >
                       <LogOut className="w-4 h-4" />
-                      <span>Se déconnecter</span>
+                      <span>{t('logout')}</span>
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
@@ -163,14 +160,14 @@ const Navigation = () => {
                     className="block text-gray-700 hover:text-blue-600 font-medium py-2 transition-colors"
                     onClick={() => setIsMenuOpen(false)}
                   >
-                    Mon profil
+                    {t('myProfile')}
                   </Link>
                   <Link 
                     to="/cart" 
                     className="block text-gray-700 hover:text-blue-600 font-medium py-2 transition-colors"
                     onClick={() => setIsMenuOpen(false)}
                   >
-                    Mon panier
+                    {t('myCart')}
                   </Link>
                   <button 
                     onClick={() => {
@@ -179,7 +176,7 @@ const Navigation = () => {
                     }}
                     className="block w-full text-left text-red-600 hover:text-red-700 font-medium py-2 transition-colors"
                   >
-                    Se déconnecter
+                    {t('logout')}
                   </button>
                 </>
               )}

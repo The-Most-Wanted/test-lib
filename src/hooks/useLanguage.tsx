@@ -16,6 +16,13 @@ const translations = {
     catalogue: "Catalogue",
     contact: "Contact",
     navigation: "Navigation",
+    profile: "Profil",
+    myAccount: "Mon compte",
+    manageProfile: "Gérer mon profil",
+    myCart: "Mon panier",
+    myProfile: "Mon profil",
+    logout: "Se déconnecter",
+    login: "Se connecter",
     
     // Hero
     heroTitle: "Prof. Mahougnon Kakpo",
@@ -40,6 +47,22 @@ const translations = {
     featuredBooksSubtitle: "Découvrez une sélection des livres les plus importants du Professeur Kakpo",
     learnMore: "En Savoir Plus",
     viewAllBooks: "Voir Tous les Livres",
+    
+    // Cart
+    cart: "Panier",
+    emptyCart: "Panier vide",
+    emptyCartMessage: "Votre panier est actuellement vide",
+    continueShopping: "Continuer les achats",
+    discoverBooks: "Découvrir nos livres",
+    orderSummary: "Résumé de la commande",
+    subtotal: "Sous-total",
+    shippingFees: "Frais de livraison",
+    free: "Gratuit",
+    total: "Total",
+    checkout: "Finaliser la commande",
+    freeShipping: "Livraison gratuite dans tout le Bénin",
+    quantity: "Quantité",
+    remove: "Supprimer",
     
     // Catalogue
     catalogueDescription: "Explorez la riche collection d'œuvres du Professeur Mahougnon Kakpo, spécialiste de la littérature africaine francophone et des traditions spirituelles du Bénin.",
@@ -110,6 +133,13 @@ const translations = {
     catalogue: "Catalogue",
     contact: "Contact",
     navigation: "Navigation",
+    profile: "Profile",
+    myAccount: "My Account",
+    manageProfile: "Manage Profile",
+    myCart: "My Cart",
+    myProfile: "My Profile",
+    logout: "Logout",
+    login: "Login",
     
     // Hero
     heroTitle: "Prof. Mahougnon Kakpo",
@@ -134,6 +164,22 @@ const translations = {
     featuredBooksSubtitle: "Discover a selection of Professor Kakpo's most important books",
     learnMore: "Learn More",
     viewAllBooks: "View All Books",
+    
+    // Cart
+    cart: "Cart",
+    emptyCart: "Empty Cart",
+    emptyCartMessage: "Your cart is currently empty",
+    continueShopping: "Continue Shopping",
+    discoverBooks: "Discover our books",
+    orderSummary: "Order Summary",
+    subtotal: "Subtotal",
+    shippingFees: "Shipping Fees",
+    free: "Free",
+    total: "Total",
+    checkout: "Checkout",
+    freeShipping: "Free shipping throughout Benin",
+    quantity: "Quantity",
+    remove: "Remove",
     
     // Catalogue
     catalogueDescription: "Explore the rich collection of works by Professor Mahougnon Kakpo, specialist in French-speaking African literature and spiritual traditions of Benin.",
