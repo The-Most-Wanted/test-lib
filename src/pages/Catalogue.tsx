@@ -1,16 +1,16 @@
+
 import { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useLanguage } from "@/hooks/useLanguage";
 import { useCart } from "@/contexts/CartContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
-import { Search, Filter, BookOpen, ShoppingCart, Eye, Star, TrendingUp, Clock, Grid, List } from "lucide-react";
+import { BookOpen, ShoppingCart, Eye, Star, Grid, List } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+import ModernSearchBar from "@/components/ModernSearchBar";
 import { toast } from "sonner";
 
 interface Book {
@@ -38,6 +38,7 @@ const Catalogue = () => {
   const [selectedGenre, setSelectedGenre] = useState("all");
   const [sortBy, setSortBy] = useState("title");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const [isSearchVisible, setIsSearchVisible] = useState(false);
 
   useEffect(() => {
     loadBooks();
@@ -158,6 +159,19 @@ const Catalogue = () => {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
       <Navigation />
       
+      {/* Modern Search Bar */}
+      <ModernSearchBar
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
+        selectedGenre={selectedGenre}
+        setSelectedGenre={setSelectedGenre}
+        sortBy={sortBy}
+        setSortBy={setSortBy}
+        genres={getUniqueGenres()}
+        isVisible={isSearchVisible}
+        onToggle={() => setIsSearchVisible(!isSearchVisible)}
+      />
+      
       <div className="relative overflow-hidden">
         {/* Hero Section */}
         <div className="relative bg-gradient-to-r from-blue-900 via-indigo-900 to-purple-900 py-20">
@@ -197,88 +211,42 @@ const Catalogue = () => {
           </div>
         </div>
 
-        {/* Search and Filters Section */}
-        <div className="bg-white/95 backdrop-blur-md shadow-xl border-b border-gray-200/50 sticky top-16 z-40">
-          <div className="container mx-auto px-4 py-6">
-            <div className="flex flex-col lg:flex-row gap-6 items-center">
-              {/* Search Bar */}
-              <div className="flex-1 w-full">
-                <div className="relative group">
-                  <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5 group-focus-within:text-blue-600 transition-colors" />
-                  <Input
-                    placeholder="Rechercher par titre, auteur, genre..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-12 pr-4 h-14 text-lg border-2 border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 rounded-xl bg-white/90 backdrop-blur-sm transition-all duration-300"
-                  />
-                </div>
+        {/* View Controls */}
+        <div className="bg-white/95 backdrop-blur-md shadow-lg border-b border-gray-200/50 sticky top-16 z-30">
+          <div className="container mx-auto px-4 py-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-4">
+                <h2 className="text-xl font-bold text-gray-800">
+                  {filteredBooks.length} livre{filteredBooks.length > 1 ? 's' : ''} trouvé{filteredBooks.length > 1 ? 's' : ''}
+                </h2>
+                {searchTerm && (
+                  <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">
+                    pour "{searchTerm}"
+                  </span>
+                )}
               </div>
-              
-              {/* Filters and View Controls */}
-              <div className="flex items-center gap-4 w-full lg:w-auto">
-                <Select value={selectedGenre} onValueChange={setSelectedGenre}>
-                  <SelectTrigger className="w-48 h-14 border-2 border-gray-200 focus:border-blue-500 rounded-xl bg-white/90">
-                    <Filter className="w-4 h-4 mr-2 text-gray-500" />
-                    <SelectValue placeholder="Genre" />
-                  </SelectTrigger>
-                  <SelectContent className="bg-white/95 backdrop-blur-md">
-                    <SelectItem value="all">Tous les genres</SelectItem>
-                    {getUniqueGenres().map(genre => (
-                      <SelectItem key={genre} value={genre}>{genre}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                
-                <Select value={sortBy} onValueChange={setSortBy}>
-                  <SelectTrigger className="w-48 h-14 border-2 border-gray-200 focus:border-blue-500 rounded-xl bg-white/90">
-                    <TrendingUp className="w-4 h-4 mr-2 text-gray-500" />
-                    <SelectValue placeholder="Trier par" />
-                  </SelectTrigger>
-                  <SelectContent className="bg-white/95 backdrop-blur-md">
-                    <SelectItem value="title">Titre A-Z</SelectItem>
-                    <SelectItem value="price_asc">Prix croissant</SelectItem>
-                    <SelectItem value="price_desc">Prix décroissant</SelectItem>
-                    <SelectItem value="year">Année de publication</SelectItem>
-                  </SelectContent>
-                </Select>
 
-                {/* View Mode Toggle */}
-                <div className="flex bg-gray-100 rounded-xl p-1">
-                  <button
-                    onClick={() => setViewMode('grid')}
-                    className={`p-3 rounded-lg transition-all ${viewMode === 'grid' ? 'bg-white shadow-md text-blue-600' : 'text-gray-500 hover:text-gray-700'}`}
-                  >
-                    <Grid className="w-5 h-5" />
-                  </button>
-                  <button
-                    onClick={() => setViewMode('list')}
-                    className={`p-3 rounded-lg transition-all ${viewMode === 'list' ? 'bg-white shadow-md text-blue-600' : 'text-gray-500 hover:text-gray-700'}`}
-                  >
-                    <List className="w-5 h-5" />
-                  </button>
-                </div>
+              {/* View Mode Toggle */}
+              <div className="flex bg-gray-100 rounded-xl p-1">
+                <button
+                  onClick={() => setViewMode('grid')}
+                  className={`p-3 rounded-lg transition-all ${viewMode === 'grid' ? 'bg-white shadow-md text-blue-600' : 'text-gray-500 hover:text-gray-700'}`}
+                >
+                  <Grid className="w-5 h-5" />
+                </button>
+                <button
+                  onClick={() => setViewMode('list')}
+                  className={`p-3 rounded-lg transition-all ${viewMode === 'list' ? 'bg-white shadow-md text-blue-600' : 'text-gray-500 hover:text-gray-700'}`}
+                >
+                  <List className="w-5 h-5" />
+                </button>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Results Section */}
+        {/* Books Display */}
         <div className="container mx-auto px-4 py-12">
-          {/* Results Header */}
-          <div className="flex items-center justify-between mb-8">
-            <div className="flex items-center space-x-4">
-              <h2 className="text-2xl font-bold text-gray-800">
-                {filteredBooks.length} livre{filteredBooks.length > 1 ? 's' : ''} trouvé{filteredBooks.length > 1 ? 's' : ''}
-              </h2>
-              {searchTerm && (
-                <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">
-                  pour "{searchTerm}"
-                </span>
-              )}
-            </div>
-          </div>
-
-          {/* Books Display */}
           {filteredBooks.length === 0 ? (
             <div className="text-center py-20">
               <div className="w-32 h-32 mx-auto mb-8 bg-gradient-to-br from-gray-100 to-gray-200 rounded-full flex items-center justify-center">
@@ -289,14 +257,10 @@ const Catalogue = () => {
                 Aucun livre ne correspond à vos critères de recherche. Essayez de modifier vos filtres.
               </p>
               <Button 
-                onClick={() => {
-                  setSearchTerm("");
-                  setSelectedGenre("all");
-                  setSortBy("title");
-                }}
+                onClick={() => setIsSearchVisible(true)}
                 className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-8 py-3 rounded-xl font-semibold"
               >
-                Réinitialiser les filtres
+                Modifier la recherche
               </Button>
             </div>
           ) : (

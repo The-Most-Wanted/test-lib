@@ -1,140 +1,188 @@
-
 import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
-import { Menu, X, User, LogOut } from "lucide-react";
-import { useLanguage } from "@/hooks/useLanguage";
+import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
-import LanguageToggle from "./LanguageToggle";
-import CartIcon from "./CartIcon";
-import { Button } from "@/components/ui/button";
+import { useLanguage } from "@/hooks/useLanguage";
+import LanguageToggle from "@/components/LanguageToggle";
+import CartIcon from "@/components/CartIcon";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from "@/components/ui/dropdown-menu"
+import { Button } from "@/components/ui/button";
+import { LogIn, LogOut, Menu, User, X, ChevronDown, ShoppingCart } from "lucide-react";
+
+interface NavigationProps {
+  // Add any props here
+}
 
 const Navigation = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const { t } = useLanguage();
   const { user, signOut } = useAuth();
-  const location = useLocation();
-
-  const toggleMenu = () => setIsOpen(!isOpen);
-
-  const navItems = [
-    { path: "/", label: t('home') },
-    { path: "/catalogue", label: t('catalogue') },
-    { path: "/contact", label: t('contact') },
-  ];
+  const { t } = useLanguage();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <nav className="bg-gradient-to-r from-blue-900 via-indigo-900 to-purple-900 text-white shadow-lg sticky top-0 z-50">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md shadow-lg border-b border-gray-200/50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-2">
-            <span className="font-playfair text-2xl font-bold bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent">
-              {t('heroTitle')}
+          <Link to="/" className="flex items-center space-x-3 group">
+            <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg flex items-center justify-center group-hover:from-indigo-600 group-hover:to-purple-600 transition-all duration-300 transform group-hover:scale-110">
+              <span className="text-white font-bold text-lg">MK</span>
+            </div>
+            <span className="font-playfair text-xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors">
+              Livres Kakpo
             </span>
           </Link>
 
-          {/* Desktop Navigation */}
+          {/* Desktop Menu */}
           <div className="hidden md:flex items-center space-x-8">
-            {navItems.map((item) => (
-              <Link
-                key={item.path}
-                to={item.path}
-                className={`font-inter transition-colors duration-300 hover:text-yellow-400 ${
-                  location.pathname === item.path ? 'text-yellow-400 border-b-2 border-yellow-400' : ''
-                }`}
-              >
-                {item.label}
-              </Link>
-            ))}
+            <Link 
+              to="/" 
+              className="text-gray-700 hover:text-blue-600 font-medium transition-colors relative group"
+            >
+              {t('home')}
+              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 transition-all duration-300 group-hover:w-full"></span>
+            </Link>
+            <Link 
+              to="/catalogue" 
+              className="text-gray-700 hover:text-blue-600 font-medium transition-colors relative group"
+            >
+              {t('catalogue')}
+              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 transition-all duration-300 group-hover:w-full"></span>
+            </Link>
+            <Link 
+              to="/contact" 
+              className="text-gray-700 hover:text-blue-600 font-medium transition-colors relative group"
+            >
+              {t('contact')}
+              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 transition-all duration-300 group-hover:w-full"></span>
+            </Link>
           </div>
 
-          {/* Desktop Actions */}
-          <div className="hidden md:flex items-center space-x-4">
+          {/* Right Side Items */}
+          <div className="flex items-center space-x-4">
             <LanguageToggle />
-            <CartIcon />
             
             {user ? (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="secondary" size="icon" className="bg-white/10 border-white/20 hover:bg-white/20 text-white">
-                    <User className="h-4 w-4" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuItem onClick={signOut}>
-                    <LogOut className="mr-2 h-4 w-4" />
-                    Déconnexion
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+              <>
+                <CartIcon />
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button 
+                      variant="ghost" 
+                      className="flex items-center space-x-2 hover:bg-blue-50 border border-transparent hover:border-blue-200 transition-all duration-300 rounded-xl px-4 py-2"
+                    >
+                      <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full flex items-center justify-center">
+                        <User className="w-4 h-4 text-white" />
+                      </div>
+                      <span className="hidden sm:block font-medium text-gray-700">Profil</span>
+                      <ChevronDown className="w-4 h-4 text-gray-500" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-56 bg-white/95 backdrop-blur-md border border-gray-200/50 shadow-xl">
+                    <DropdownMenuLabel className="text-gray-900">Mon compte</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem asChild>
+                      <Link to="/profile" className="flex items-center space-x-2 cursor-pointer hover:bg-blue-50 transition-colors">
+                        <User className="w-4 h-4" />
+                        <span>Gérer mon profil</span>
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link to="/cart" className="flex items-center space-x-2 cursor-pointer hover:bg-blue-50 transition-colors">
+                        <ShoppingCart className="w-4 h-4" />
+                        <span>Mon panier</span>
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem 
+                      onClick={() => signOut()}
+                      className="flex items-center space-x-2 cursor-pointer text-red-600 hover:bg-red-50 transition-colors"
+                    >
+                      <LogOut className="w-4 h-4" />
+                      <span>Se déconnecter</span>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </>
             ) : (
               <Link to="/auth">
-                <Button className="bg-white text-blue-900 hover:bg-gray-100 font-semibold">
-                  Connexion
+                <Button className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold px-6 py-2 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
+                  <LogIn className="w-4 h-4 mr-2" />
+                  {t('login')}
                 </Button>
               </Link>
             )}
-          </div>
 
-          {/* Mobile menu button */}
-          <div className="md:hidden flex items-center space-x-4">
-            <CartIcon />
-            <button
-              onClick={toggleMenu}
-              className="text-white hover:text-yellow-400 transition-colors duration-300"
+            {/* Mobile Menu Button */}
+            <Button
+              variant="ghost"
+              className="md:hidden p-2 hover:bg-gray-100 rounded-lg"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
             >
-              {isOpen ? <X size={24} /> : <Menu size={24} />}
-            </button>
+              {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </Button>
           </div>
         </div>
 
-        {/* Mobile Navigation */}
-        {isOpen && (
-          <div className="md:hidden">
-            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-blue-800/50 backdrop-blur-md rounded-lg mb-4">
-              {navItems.map((item) => (
-                <Link
-                  key={item.path}
-                  to={item.path}
-                  className={`block px-3 py-2 rounded-md text-base font-medium transition-colors duration-300 hover:text-yellow-400 hover:bg-white/10 ${
-                    location.pathname === item.path ? 'text-yellow-400 bg-white/10' : ''
-                  }`}
-                  onClick={() => setIsOpen(false)}
-                >
-                  {item.label}
-                </Link>
-              ))}
+        {/* Mobile Menu */}
+        {isMenuOpen && (
+          <div className="md:hidden absolute top-16 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-gray-200/50 shadow-lg animate-fade-in">
+            <div className="px-4 py-6 space-y-4">
+              <Link 
+                to="/" 
+                className="block text-gray-700 hover:text-blue-600 font-medium py-2 transition-colors"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                {t('home')}
+              </Link>
+              <Link 
+                to="/catalogue" 
+                className="block text-gray-700 hover:text-blue-600 font-medium py-2 transition-colors"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                {t('catalogue')}
+              </Link>
+              <Link 
+                to="/contact" 
+                className="block text-gray-700 hover:text-blue-600 font-medium py-2 transition-colors"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                {t('contact')}
+              </Link>
               
-              <div className="px-3 py-2 flex items-center justify-between">
-                <LanguageToggle />
-                
-                {user ? (
-                  <Button
-                    variant="secondary"
-                    size="sm"
+              {user && (
+                <>
+                  <hr className="border-gray-200" />
+                  <Link 
+                    to="/profile" 
+                    className="block text-gray-700 hover:text-blue-600 font-medium py-2 transition-colors"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Mon profil
+                  </Link>
+                  <Link 
+                    to="/cart" 
+                    className="block text-gray-700 hover:text-blue-600 font-medium py-2 transition-colors"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Mon panier
+                  </Link>
+                  <button 
                     onClick={() => {
                       signOut();
-                      setIsOpen(false);
+                      setIsMenuOpen(false);
                     }}
-                    className="bg-white/10 border-white/20 hover:bg-white/20 text-white"
+                    className="block w-full text-left text-red-600 hover:text-red-700 font-medium py-2 transition-colors"
                   >
-                    <LogOut className="mr-2 h-4 w-4" />
-                    Déconnexion
-                  </Button>
-                ) : (
-                  <Link to="/auth" onClick={() => setIsOpen(false)}>
-                    <Button size="sm" className="bg-white text-blue-900 hover:bg-gray-100 font-semibold">
-                      Connexion
-                    </Button>
-                  </Link>
-                )}
-              </div>
+                    Se déconnecter
+                  </button>
+                </>
+              )}
             </div>
           </div>
         )}
