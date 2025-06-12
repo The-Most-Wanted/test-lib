@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -8,7 +7,7 @@ import { useLanguage } from "@/hooks/useLanguage";
 import { useCart } from "@/contexts/CartContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
-import { Search, Filter, BookOpen, ShoppingCart, Eye } from "lucide-react";
+import { Search, Filter, BookOpen, ShoppingCart, Eye, Star, TrendingUp, Clock, Grid, List } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
@@ -38,6 +37,7 @@ const Catalogue = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedGenre, setSelectedGenre] = useState("all");
   const [sortBy, setSortBy] = useState("title");
+  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 
   useEffect(() => {
     loadBooks();
@@ -141,10 +141,13 @@ const Catalogue = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
         <Navigation />
-        <div className="container mx-auto px-4 py-20 text-center">
-          <p className="text-gray-600">Chargement du catalogue...</p>
+        <div className="container mx-auto px-4 py-20">
+          <div className="flex flex-col items-center justify-center space-y-6">
+            <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+            <p className="text-gray-600 text-lg font-medium">Chargement du catalogue...</p>
+          </div>
         </div>
         <Footer />
       </div>
@@ -152,151 +155,309 @@ const Catalogue = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
       <Navigation />
       
-      <div className="container mx-auto px-4 py-8">
-        <div className="text-center mb-12">
-          <h1 className="font-playfair text-4xl sm:text-5xl font-bold bg-gradient-to-r from-blue-900 via-indigo-900 to-purple-900 bg-clip-text text-transparent mb-6">
-            {t('catalogueTitle')}
-          </h1>
-          <p className="font-inter text-xl text-gray-600 max-w-2xl mx-auto">
-            {t('catalogueSubtitle')}
-          </p>
-        </div>
-
-        {/* Filters */}
-        <div className="mb-8 space-y-4 lg:space-y-0 lg:flex lg:items-center lg:space-x-4">
-          <div className="flex-1">
-            <div className="relative">
-              <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-              <Input
-                placeholder="Rechercher un livre..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10"
-              />
+      <div className="relative overflow-hidden">
+        {/* Hero Section */}
+        <div className="relative bg-gradient-to-r from-blue-900 via-indigo-900 to-purple-900 py-20">
+          <div className="absolute inset-0 bg-black/20"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 to-purple-600/10"></div>
+          
+          <div className="relative container mx-auto px-4 text-center">
+            <div className="max-w-4xl mx-auto">
+              <h1 className="font-playfair text-5xl sm:text-6xl lg:text-7xl font-bold text-white mb-6 animate-fade-in">
+                Notre Catalogue
+                <span className="block text-3xl sm:text-4xl lg:text-5xl bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent mt-2">
+                  Littéraire
+                </span>
+              </h1>
+              <p className="font-inter text-xl sm:text-2xl text-blue-100 max-w-2xl mx-auto leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s' }}>
+                Découvrez notre collection soigneusement sélectionnée de livres qui éveillent l'esprit
+              </p>
+              
+              {/* Stats */}
+              <div className="grid grid-cols-3 gap-8 mt-12 max-w-2xl mx-auto animate-fade-in" style={{ animationDelay: '0.4s' }}>
+                <div className="text-center">
+                  <div className="text-3xl sm:text-4xl font-bold text-white mb-2">{books.length}</div>
+                  <div className="text-blue-200 text-sm uppercase tracking-wide">Livres</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-3xl sm:text-4xl font-bold text-white mb-2">{getUniqueGenres().length}</div>
+                  <div className="text-blue-200 text-sm uppercase tracking-wide">Genres</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-3xl sm:text-4xl font-bold text-white mb-2">
+                    {books.filter(book => book.year >= new Date().getFullYear() - 1).length}
+                  </div>
+                  <div className="text-blue-200 text-sm uppercase tracking-wide">Nouveautés</div>
+                </div>
+              </div>
             </div>
           </div>
-          
-          <div className="flex space-x-4">
-            <Select value={selectedGenre} onValueChange={setSelectedGenre}>
-              <SelectTrigger className="w-48">
-                <Filter className="w-4 h-4 mr-2" />
-                <SelectValue placeholder="Genre" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Tous les genres</SelectItem>
-                {getUniqueGenres().map(genre => (
-                  <SelectItem key={genre} value={genre}>{genre}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            
-            <Select value={sortBy} onValueChange={setSortBy}>
-              <SelectTrigger className="w-48">
-                <SelectValue placeholder="Trier par" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="title">Titre A-Z</SelectItem>
-                <SelectItem value="price_asc">Prix croissant</SelectItem>
-                <SelectItem value="price_desc">Prix décroissant</SelectItem>
-                <SelectItem value="year">Année de publication</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
         </div>
 
-        {/* Results count */}
-        <div className="mb-6">
-          <p className="text-gray-600">
-            {filteredBooks.length} livre{filteredBooks.length > 1 ? 's' : ''} trouvé{filteredBooks.length > 1 ? 's' : ''}
-          </p>
-        </div>
-
-        {/* Books Grid */}
-        {filteredBooks.length === 0 ? (
-          <div className="text-center py-12">
-            <BookOpen className="w-16 h-16 mx-auto mb-4 text-gray-400" />
-            <h3 className="text-xl font-semibold mb-2">Aucun livre trouvé</h3>
-            <p className="text-gray-600">Essayez de modifier vos critères de recherche.</p>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {filteredBooks.map((book) => (
-              <Card 
-                key={book.id} 
-                className="group hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 bg-white/95 backdrop-blur-md border-0 shadow-lg hover:shadow-blue-200/50 overflow-hidden"
-              >
-                <div className="aspect-[3/4] bg-gradient-to-br from-blue-100 to-indigo-100 rounded-t-lg overflow-hidden relative">
-                  <div className="w-full h-full flex items-center justify-center p-6">
-                    <div className="text-center">
-                      <div className="w-16 h-16 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full mx-auto mb-3 flex items-center justify-center group-hover:from-indigo-600 group-hover:to-purple-600 transition-all duration-500 shadow-lg">
-                        <span className="text-white text-2xl font-playfair font-bold">
-                          {(language === 'fr' ? book.title : book.title_en).charAt(0)}
-                        </span>
-                      </div>
-                      <h3 className="text-blue-800 font-playfair font-bold text-sm leading-tight px-2">
-                        {language === 'fr' ? book.title : book.title_en}
-                      </h3>
-                    </div>
-                  </div>
-                  <div className="absolute top-3 right-3 bg-gradient-to-r from-yellow-400 to-orange-400 text-gray-900 px-2 py-1 rounded-full text-xs font-bold opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-y-2 group-hover:translate-y-0 shadow-lg">
-                    {book.year}
-                  </div>
+        {/* Search and Filters Section */}
+        <div className="bg-white/95 backdrop-blur-md shadow-xl border-b border-gray-200/50 sticky top-16 z-40">
+          <div className="container mx-auto px-4 py-6">
+            <div className="flex flex-col lg:flex-row gap-6 items-center">
+              {/* Search Bar */}
+              <div className="flex-1 w-full">
+                <div className="relative group">
+                  <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5 group-focus-within:text-blue-600 transition-colors" />
+                  <Input
+                    placeholder="Rechercher par titre, auteur, genre..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="pl-12 pr-4 h-14 text-lg border-2 border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 rounded-xl bg-white/90 backdrop-blur-sm transition-all duration-300"
+                  />
                 </div>
+              </div>
+              
+              {/* Filters and View Controls */}
+              <div className="flex items-center gap-4 w-full lg:w-auto">
+                <Select value={selectedGenre} onValueChange={setSelectedGenre}>
+                  <SelectTrigger className="w-48 h-14 border-2 border-gray-200 focus:border-blue-500 rounded-xl bg-white/90">
+                    <Filter className="w-4 h-4 mr-2 text-gray-500" />
+                    <SelectValue placeholder="Genre" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-white/95 backdrop-blur-md">
+                    <SelectItem value="all">Tous les genres</SelectItem>
+                    {getUniqueGenres().map(genre => (
+                      <SelectItem key={genre} value={genre}>{genre}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
                 
-                <CardContent className="p-4">
-                  <div className="mb-3 flex items-center justify-between">
-                    <span className="inline-block bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-800 px-2 py-1 rounded-full text-xs font-medium border border-blue-200">
-                      <BookOpen className="w-3 h-3 inline mr-1" />
-                      {language === 'fr' ? book.genre : book.genre_en}
-                    </span>
-                    <span className="text-lg font-bold text-green-600">
-                      {formatPrice(book.price)}
-                    </span>
-                  </div>
-                  
-                  <p className="font-inter text-gray-600 mb-4 text-xs leading-relaxed line-clamp-2">
-                    {language === 'fr' ? book.description : book.description_en}
-                  </p>
-                  
-                  <div className="flex items-center justify-between gap-2">
-                    <button
-                      onClick={() => handleViewBook(book.id)}
-                      className="flex-1 group/btn relative overflow-hidden bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-700 hover:via-indigo-700 hover:to-purple-700 text-white font-semibold py-2 px-3 rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg shadow-md"
-                    >
-                      <div className="relative flex items-center justify-center space-x-1">
-                        <Eye className="w-3 h-3" />
-                        <span className="text-xs">Voir</span>
-                      </div>
-                    </button>
-                    
-                    <Button
-                      onClick={() => handleAddToCart(book)}
-                      disabled={book.stock_quantity <= 0}
-                      className="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 px-3 py-2"
-                    >
-                      <ShoppingCart className="w-3 h-3" />
-                    </Button>
-                  </div>
-                  
-                  {book.stock_quantity <= 5 && book.stock_quantity > 0 && (
-                    <p className="text-orange-600 text-xs mt-2 text-center">
-                      Plus que {book.stock_quantity} en stock !
-                    </p>
-                  )}
-                  
-                  {book.stock_quantity <= 0 && (
-                    <p className="text-red-600 text-xs mt-2 text-center font-semibold">
-                      Rupture de stock
-                    </p>
-                  )}
-                </CardContent>
-              </Card>
-            ))}
+                <Select value={sortBy} onValueChange={setSortBy}>
+                  <SelectTrigger className="w-48 h-14 border-2 border-gray-200 focus:border-blue-500 rounded-xl bg-white/90">
+                    <TrendingUp className="w-4 h-4 mr-2 text-gray-500" />
+                    <SelectValue placeholder="Trier par" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-white/95 backdrop-blur-md">
+                    <SelectItem value="title">Titre A-Z</SelectItem>
+                    <SelectItem value="price_asc">Prix croissant</SelectItem>
+                    <SelectItem value="price_desc">Prix décroissant</SelectItem>
+                    <SelectItem value="year">Année de publication</SelectItem>
+                  </SelectContent>
+                </Select>
+
+                {/* View Mode Toggle */}
+                <div className="flex bg-gray-100 rounded-xl p-1">
+                  <button
+                    onClick={() => setViewMode('grid')}
+                    className={`p-3 rounded-lg transition-all ${viewMode === 'grid' ? 'bg-white shadow-md text-blue-600' : 'text-gray-500 hover:text-gray-700'}`}
+                  >
+                    <Grid className="w-5 h-5" />
+                  </button>
+                  <button
+                    onClick={() => setViewMode('list')}
+                    className={`p-3 rounded-lg transition-all ${viewMode === 'list' ? 'bg-white shadow-md text-blue-600' : 'text-gray-500 hover:text-gray-700'}`}
+                  >
+                    <List className="w-5 h-5" />
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
-        )}
+        </div>
+
+        {/* Results Section */}
+        <div className="container mx-auto px-4 py-12">
+          {/* Results Header */}
+          <div className="flex items-center justify-between mb-8">
+            <div className="flex items-center space-x-4">
+              <h2 className="text-2xl font-bold text-gray-800">
+                {filteredBooks.length} livre{filteredBooks.length > 1 ? 's' : ''} trouvé{filteredBooks.length > 1 ? 's' : ''}
+              </h2>
+              {searchTerm && (
+                <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">
+                  pour "{searchTerm}"
+                </span>
+              )}
+            </div>
+          </div>
+
+          {/* Books Display */}
+          {filteredBooks.length === 0 ? (
+            <div className="text-center py-20">
+              <div className="w-32 h-32 mx-auto mb-8 bg-gradient-to-br from-gray-100 to-gray-200 rounded-full flex items-center justify-center">
+                <BookOpen className="w-16 h-16 text-gray-400" />
+              </div>
+              <h3 className="text-2xl font-bold text-gray-800 mb-4">Aucun livre trouvé</h3>
+              <p className="text-gray-600 text-lg mb-8 max-w-md mx-auto">
+                Aucun livre ne correspond à vos critères de recherche. Essayez de modifier vos filtres.
+              </p>
+              <Button 
+                onClick={() => {
+                  setSearchTerm("");
+                  setSelectedGenre("all");
+                  setSortBy("title");
+                }}
+                className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-8 py-3 rounded-xl font-semibold"
+              >
+                Réinitialiser les filtres
+              </Button>
+            </div>
+          ) : (
+            <div className={viewMode === 'grid' 
+              ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8" 
+              : "space-y-6"
+            }>
+              {filteredBooks.map((book, index) => (
+                <Card 
+                  key={book.id} 
+                  className={`group hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-3 animate-fade-in bg-white/95 backdrop-blur-md border-0 shadow-lg hover:shadow-blue-200/50 overflow-hidden ${
+                    viewMode === 'list' ? 'flex flex-row' : ''
+                  }`}
+                  style={{ animationDelay: `${index * 0.05}s` }}
+                >
+                  {viewMode === 'grid' ? (
+                    <>
+                      <div className="aspect-[3/4] bg-gradient-to-br from-blue-100 via-indigo-100 to-purple-100 relative overflow-hidden">
+                        <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-purple-500/10"></div>
+                        <div className="relative w-full h-full flex items-center justify-center p-8">
+                          <div className="text-center">
+                            <div className="w-20 h-20 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 rounded-2xl mx-auto mb-4 flex items-center justify-center group-hover:from-indigo-600 group-hover:to-purple-700 transition-all duration-700 shadow-xl group-hover:shadow-2xl transform group-hover:scale-110">
+                              <span className="text-white text-3xl font-playfair font-bold">
+                                {(language === 'fr' ? book.title : book.title_en).charAt(0)}
+                              </span>
+                            </div>
+                            <h3 className="text-blue-800 font-playfair font-bold text-lg leading-tight px-2 group-hover:text-indigo-900 transition-colors">
+                              {language === 'fr' ? book.title : book.title_en}
+                            </h3>
+                          </div>
+                        </div>
+                        
+                        {/* Floating Elements */}
+                        <div className="absolute top-4 right-4 bg-gradient-to-r from-yellow-400 to-orange-400 text-gray-900 px-3 py-1 rounded-full text-sm font-bold opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-y-2 group-hover:translate-y-0 shadow-lg">
+                          {book.year}
+                        </div>
+                        <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-500 transform -translate-y-2 group-hover:translate-y-0">
+                          <Star className="w-4 h-4 text-yellow-500 fill-current" />
+                        </div>
+                        
+                        {book.stock_quantity <= 5 && book.stock_quantity > 0 && (
+                          <div className="absolute bottom-4 left-4 bg-orange-500 text-white px-2 py-1 rounded-full text-xs font-bold">
+                            Stock limité
+                          </div>
+                        )}
+                      </div>
+                      
+                      <CardContent className="p-6">
+                        <div className="mb-4 flex items-center justify-between">
+                          <span className="inline-flex items-center bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium border border-blue-200/50">
+                            <BookOpen className="w-3 h-3 mr-1" />
+                            {language === 'fr' ? book.genre : book.genre_en}
+                          </span>
+                          <span className="text-2xl font-bold bg-gradient-to-r from-green-600 to-green-700 bg-clip-text text-transparent">
+                            {formatPrice(book.price)}
+                          </span>
+                        </div>
+                        
+                        <p className="font-inter text-gray-600 mb-6 text-sm leading-relaxed line-clamp-3">
+                          {language === 'fr' ? book.description : book.description_en}
+                        </p>
+                        
+                        <div className="flex items-center gap-3">
+                          <button
+                            onClick={() => handleViewBook(book.id)}
+                            className="flex-1 group/btn relative overflow-hidden bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-700 hover:via-indigo-700 hover:to-purple-700 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-xl shadow-lg"
+                          >
+                            <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300"></div>
+                            <div className="relative flex items-center justify-center space-x-2">
+                              <Eye className="w-4 h-4" />
+                              <span className="text-sm">Découvrir</span>
+                            </div>
+                          </button>
+                          
+                          <Button
+                            onClick={() => handleAddToCart(book)}
+                            disabled={book.stock_quantity <= 0}
+                            className="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 px-4 py-3 font-semibold rounded-xl transform hover:scale-105 transition-all duration-300"
+                          >
+                            <ShoppingCart className="w-4 h-4" />
+                          </Button>
+                        </div>
+                        
+                        {book.stock_quantity <= 0 && (
+                          <p className="text-red-600 text-sm mt-3 text-center font-semibold bg-red-50 py-2 rounded-lg">
+                            Rupture de stock
+                          </p>
+                        )}
+                      </CardContent>
+                    </>
+                  ) : (
+                    /* List View */
+                    <div className="flex w-full">
+                      <div className="w-32 h-32 bg-gradient-to-br from-blue-100 to-indigo-100 flex items-center justify-center rounded-l-lg">
+                        <div className="w-16 h-16 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center">
+                          <span className="text-white text-xl font-playfair font-bold">
+                            {(language === 'fr' ? book.title : book.title_en).charAt(0)}
+                          </span>
+                        </div>
+                      </div>
+                      <CardContent className="flex-1 p-6">
+                        <div className="flex justify-between items-start mb-3">
+                          <div>
+                            <h3 className="text-xl font-playfair font-bold text-gray-800 mb-1">
+                              {language === 'fr' ? book.title : book.title_en}
+                            </h3>
+                            <span className="inline-block bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs font-medium">
+                              {language === 'fr' ? book.genre : book.genre_en}
+                            </span>
+                          </div>
+                          <span className="text-2xl font-bold text-green-600">
+                            {formatPrice(book.price)}
+                          </span>
+                        </div>
+                        
+                        <p className="text-gray-600 mb-4 text-sm line-clamp-2">
+                          {language === 'fr' ? book.description : book.description_en}
+                        </p>
+                        
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-3">
+                            <button
+                              onClick={() => handleViewBook(book.id)}
+                              className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-300"
+                            >
+                              <Eye className="w-4 h-4 inline mr-1" />
+                              Voir
+                            </button>
+                            
+                            <Button
+                              onClick={() => handleAddToCart(book)}
+                              disabled={book.stock_quantity <= 0}
+                              size="sm"
+                              className="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800"
+                            >
+                              <ShoppingCart className="w-4 h-4" />
+                            </Button>
+                          </div>
+                          
+                          <div className="text-right">
+                            <div className="text-sm text-gray-500 mb-1">Publié en {book.year}</div>
+                            {book.stock_quantity <= 5 && book.stock_quantity > 0 && (
+                              <div className="text-orange-600 text-xs font-semibold">
+                                Plus que {book.stock_quantity} en stock
+                              </div>
+                            )}
+                            {book.stock_quantity <= 0 && (
+                              <div className="text-red-600 text-xs font-semibold">
+                                Rupture de stock
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </CardContent>
+                    </div>
+                  )}
+                </Card>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
 
       <Footer />
