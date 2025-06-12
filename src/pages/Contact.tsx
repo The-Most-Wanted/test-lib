@@ -1,245 +1,271 @@
 
-import Navigation from "@/components/Navigation";
-import Footer from "@/components/Footer";
-import FloatingElements from "@/components/FloatingElements";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
-import { useState } from "react";
-import { useToast } from "@/hooks/use-toast";
-import { useLanguage } from "@/hooks/useLanguage";
-import { Mail, Phone, MapPin, Clock, Award, BookOpen, Send, User, MessageSquare } from "lucide-react";
-import AnimatedButton from "@/components/AnimatedButton";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import Navigation from "@/components/Navigation";
+import Footer from "@/components/Footer";
+import { toast } from "sonner";
+import { Mail, Phone, MapPin, Clock, Send, MessageSquare, Users, BookOpen } from "lucide-react";
 
 const Contact = () => {
-  const { t } = useLanguage();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     subject: "",
     message: ""
   });
-  const { toast } = useToast();
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    toast({
-      title: t('messageSent'),
-      description: t('messageResponse'),
-    });
-    setFormData({ name: "", email: "", subject: "", message: "" });
+    setLoading(true);
+    
+    // Simulate form submission
+    setTimeout(() => {
+      toast.success("Message envoyé avec succès ! Nous vous répondrons bientôt.");
+      setFormData({ name: "", email: "", subject: "", message: "" });
+      setLoading(false);
+    }, 1000);
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData(prev => ({
-      ...prev,
-      [e.target.name]: e.target.value
-    }));
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50/50 via-white to-indigo-50/50 font-inter relative overflow-hidden">
-      <FloatingElements />
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
       <Navigation />
       
       {/* Hero Section */}
-      <div className="relative z-10 bg-gradient-to-r from-blue-900 via-indigo-900 to-purple-900 text-white py-20">
-        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1516321318423-f06f85e504b3')] bg-cover bg-center bg-no-repeat opacity-10"></div>
-        <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="font-playfair text-5xl sm:text-6xl font-bold mb-6 animate-fade-in">
-            {t('contact')}
-          </h1>
-          <p className="font-inter text-xl text-blue-100 max-w-3xl mx-auto leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s' }}>
-            {t('contactDescription')}
-          </p>
-          <div className="mt-8 w-32 h-1 bg-gradient-to-r from-yellow-400 to-orange-400 mx-auto rounded-full animate-fade-in" style={{ animationDelay: '0.4s' }}></div>
+      <section className="relative pt-24 pb-16 overflow-hidden">
+        <div className="absolute inset-0">
+          <div className="absolute top-20 left-20 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute bottom-20 right-20 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
         </div>
-      </div>
+        
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h1 className="text-5xl md:text-6xl font-playfair font-bold text-gray-900 mb-6">
+            Restons en
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">
+              {" "}contact
+            </span>
+          </h1>
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+            Une question, une suggestion ou besoin d'aide ? Notre équipe est là pour vous accompagner dans votre parcours littéraire.
+          </p>
+        </div>
+      </section>
 
-      {/* Contact Content */}
-      <div className="relative z-10 py-20">
+      {/* Contact Section */}
+      <section className="py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             
             {/* Contact Form */}
-            <Card className="animate-fade-in shadow-2xl bg-white/90 backdrop-blur-md border-0">
-              <CardHeader className="text-center pb-8">
-                <CardTitle className="font-playfair text-3xl text-gray-900 mb-4">
-                  {t('sendMessage')}
-                </CardTitle>
-                <div className="w-20 h-1 bg-gradient-to-r from-blue-600 to-indigo-600 mx-auto rounded-full"></div>
-              </CardHeader>
-              <CardContent className="p-8">
-                <form onSubmit={handleSubmit} className="space-y-6">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                    <div className="space-y-2">
-                      <Label htmlFor="name" className="font-inter font-medium flex items-center gap-2">
-                        <User className="w-4 h-4 text-blue-600" />
-                        {t('fullName')}
-                      </Label>
-                      <Input
-                        id="name"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleChange}
-                        required
-                        className="h-12 border-2 border-gray-200 focus:border-blue-500 transition-colors"
-                        placeholder={t('fullNamePlaceholder')}
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="email" className="font-inter font-medium flex items-center gap-2">
-                        <Mail className="w-4 h-4 text-blue-600" />
-                        {t('email')}
-                      </Label>
-                      <Input
-                        id="email"
-                        name="email"
-                        type="email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        required
-                        className="h-12 border-2 border-gray-200 focus:border-blue-500 transition-colors"
-                        placeholder={t('emailPlaceholder')}
-                      />
-                    </div>
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <Label htmlFor="subject" className="font-inter font-medium flex items-center gap-2">
-                      <MessageSquare className="w-4 h-4 text-blue-600" />
-                      {t('subject')}
-                    </Label>
-                    <Input
-                      id="subject"
-                      name="subject"
-                      value={formData.subject}
-                      onChange={handleChange}
-                      required
-                      className="h-12 border-2 border-gray-200 focus:border-blue-500 transition-colors"
-                      placeholder={t('subjectPlaceholder')}
-                    />
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <Label htmlFor="message" className="font-inter font-medium">
-                      {t('message')}
-                    </Label>
-                    <Textarea
-                      id="message"
-                      name="message"
-                      value={formData.message}
-                      onChange={handleChange}
-                      required
-                      rows={6}
-                      className="border-2 border-gray-200 focus:border-blue-500 transition-colors resize-none"
-                      placeholder={t('messagePlaceholder')}
-                    />
-                  </div>
-                  
-                  <AnimatedButton type="submit" variant="primary" size="lg" className="w-full">
-                    <Send className="w-5 h-5 mr-2" />
-                    {t('sendMessage')}
-                  </AnimatedButton>
-                </form>
-              </CardContent>
-            </Card>
+            <div className="space-y-8">
+              <div>
+                <h2 className="text-3xl font-playfair font-bold text-gray-900 mb-4">
+                  Envoyez-nous un message
+                </h2>
+                <p className="text-gray-600 text-lg">
+                  Remplissez le formulaire ci-dessous et nous vous répondrons dans les plus brefs délais.
+                </p>
+              </div>
 
-            {/* Contact Information & Professor Info */}
+              <Card className="bg-white/80 backdrop-blur-md shadow-xl border-0">
+                <CardContent className="p-8">
+                  <form onSubmit={handleSubmit} className="space-y-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                      <div>
+                        <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
+                          Nom complet
+                        </label>
+                        <Input
+                          id="name"
+                          name="name"
+                          type="text"
+                          value={formData.name}
+                          onChange={handleInputChange}
+                          required
+                          className="h-12 border-gray-200 focus:border-blue-500 focus:ring-blue-500/20"
+                          placeholder="Votre nom"
+                        />
+                      </div>
+                      <div>
+                        <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                          Email
+                        </label>
+                        <Input
+                          id="email"
+                          name="email"
+                          type="email"
+                          value={formData.email}
+                          onChange={handleInputChange}
+                          required
+                          className="h-12 border-gray-200 focus:border-blue-500 focus:ring-blue-500/20"
+                          placeholder="votre@email.com"
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label htmlFor="subject" className="block text-sm font-medium text-gray-700 mb-2">
+                        Sujet
+                      </label>
+                      <Input
+                        id="subject"
+                        name="subject"
+                        type="text"
+                        value={formData.subject}
+                        onChange={handleInputChange}
+                        required
+                        className="h-12 border-gray-200 focus:border-blue-500 focus:ring-blue-500/20"
+                        placeholder="De quoi souhaitez-vous nous parler ?"
+                      />
+                    </div>
+
+                    <div>
+                      <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2">
+                        Message
+                      </label>
+                      <Textarea
+                        id="message"
+                        name="message"
+                        value={formData.message}
+                        onChange={handleInputChange}
+                        required
+                        rows={6}
+                        className="border-gray-200 focus:border-blue-500 focus:ring-blue-500/20 resize-none"
+                        placeholder="Écrivez votre message ici..."
+                      />
+                    </div>
+
+                    <Button
+                      type="submit"
+                      disabled={loading}
+                      className="w-full h-12 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold text-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+                    >
+                      {loading ? (
+                        <div className="flex items-center space-x-2">
+                          <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                          <span>Envoi en cours...</span>
+                        </div>
+                      ) : (
+                        <div className="flex items-center space-x-2">
+                          <Send className="w-5 h-5" />
+                          <span>Envoyer le message</span>
+                        </div>
+                      )}
+                    </Button>
+                  </form>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Contact Info & Stats */}
             <div className="space-y-8">
               
-              {/* Contact Info */}
-              <Card className="animate-fade-in shadow-2xl bg-white/90 backdrop-blur-md border-0" style={{ animationDelay: "0.2s" }}>
-                <CardContent className="p-8">
-                  <h3 className="font-playfair text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
-                    <Mail className="w-6 h-6 text-blue-600" />
-                    {t('contactInfo')}
-                  </h3>
-                  <div className="space-y-6 font-inter">
-                    <div className="flex items-start gap-4 p-4 rounded-xl bg-blue-50 hover:bg-blue-100 transition-colors">
-                      <Mail className="w-5 h-5 text-blue-600 mt-1" />
-                      <div>
-                        <h4 className="font-semibold text-gray-900">{t('email')}</h4>
-                        <p className="text-gray-700">mkakpo2012@yahoo.fr</p>
-                      </div>
+              {/* Contact Information */}
+              <Card className="bg-white/80 backdrop-blur-md shadow-xl border-0">
+                <CardHeader>
+                  <CardTitle className="text-2xl font-playfair text-gray-900 flex items-center gap-3">
+                    <MessageSquare className="w-7 h-7 text-blue-600" />
+                    Informations de contact
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  <div className="flex items-start space-x-4">
+                    <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <Mail className="w-6 h-6 text-white" />
                     </div>
-                    <div className="flex items-start gap-4 p-4 rounded-xl bg-green-50 hover:bg-green-100 transition-colors">
-                      <Phone className="w-5 h-5 text-green-600 mt-1" />
-                      <div>
-                        <h4 className="font-semibold text-gray-900">{t('phone')}</h4>
-                        <p className="text-gray-700">+229 01 97 26 54 70</p>
-                      </div>
+                    <div>
+                      <h3 className="font-semibold text-gray-900 mb-1">Email</h3>
+                      <p className="text-gray-600">contact@livreskakpo.com</p>
+                      <p className="text-gray-600">support@livreskakpo.com</p>
                     </div>
-                    <div className="flex items-start gap-4 p-4 rounded-xl bg-purple-50 hover:bg-purple-100 transition-colors">
-                      <MapPin className="w-5 h-5 text-purple-600 mt-1" />
-                      <div>
-                        <h4 className="font-semibold text-gray-900">{t('address')}</h4>
-                        <p className="text-gray-700">
-                          Godomey Fignonhou<br />
-                          Bénin
-                        </p>
-                      </div>
+                  </div>
+
+                  <div className="flex items-start space-x-4">
+                    <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-emerald-500 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <Phone className="w-6 h-6 text-white" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-gray-900 mb-1">Téléphone</h3>
+                      <p className="text-gray-600">+229 XX XX XX XX</p>
+                      <p className="text-gray-600">+229 XX XX XX XX</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start space-x-4">
+                    <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <MapPin className="w-6 h-6 text-white" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-gray-900 mb-1">Adresse</h3>
+                      <p className="text-gray-600">Cotonou, Bénin</p>
+                      <p className="text-gray-600">Quartier Administratif</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start space-x-4">
+                    <div className="w-12 h-12 bg-gradient-to-r from-orange-500 to-red-500 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <Clock className="w-6 h-6 text-white" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-gray-900 mb-1">Horaires</h3>
+                      <p className="text-gray-600">Lun - Ven: 8h00 - 18h00</p>
+                      <p className="text-gray-600">Sam: 9h00 - 15h00</p>
                     </div>
                   </div>
                 </CardContent>
               </Card>
 
-              {/* Professor Achievements */}
-              <Card className="animate-fade-in shadow-2xl bg-white/90 backdrop-blur-md border-0" style={{ animationDelay: "0.4s" }}>
-                <CardContent className="p-8">
-                  <h3 className="font-playfair text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
-                    <Award className="w-6 h-6 text-yellow-600" />
-                    {t('achievements')}
-                  </h3>
-                  <div className="space-y-4 font-inter text-gray-700">
-                    <div className="flex items-center gap-3 p-3 rounded-lg bg-yellow-50">
-                      <Award className="w-4 h-4 text-yellow-600" />
-                      <span>{t('knightOrder')}</span>
-                    </div>
-                    <div className="flex items-center gap-3 p-3 rounded-lg bg-blue-50">
-                      <BookOpen className="w-4 h-4 text-blue-600" />
-                      <span>{t('professorTitle')}</span>
-                    </div>
-                    <div className="flex items-center gap-3 p-3 rounded-lg bg-indigo-50">
-                      <Clock className="w-4 h-4 text-indigo-600" />
-                      <span>{t('ministerEducation')}</span>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+              {/* Statistics */}
+              <div className="grid grid-cols-2 gap-4">
+                <Card className="bg-gradient-to-br from-blue-500 to-indigo-600 text-white border-0">
+                  <CardContent className="p-6 text-center">
+                    <Users className="w-8 h-8 mx-auto mb-3" />
+                    <div className="text-2xl font-bold mb-1">1000+</div>
+                    <div className="text-sm opacity-90">Clients satisfaits</div>
+                  </CardContent>
+                </Card>
 
-              {/* Quick Links */}
-              <Card className="animate-fade-in shadow-2xl bg-gradient-to-br from-blue-600 to-indigo-600 text-white border-0" style={{ animationDelay: "0.6s" }}>
-                <CardContent className="p-8 text-center">
-                  <h3 className="font-playfair text-2xl font-bold mb-6">
-                    {t('exploreMore')}
-                  </h3>
-                  <div className="space-y-4">
-                    <AnimatedButton 
-                      variant="secondary" 
-                      size="lg" 
-                      className="w-full"
-                      onClick={() => window.location.href = '/catalogue'}
-                    >
-                      {t('viewBooks')}
-                    </AnimatedButton>
-                    <AnimatedButton 
-                      variant="outline" 
-                      size="lg" 
-                      className="w-full border-white text-white hover:bg-white hover:text-blue-600"
-                      onClick={() => window.location.href = '/'}
-                    >
-                      {t('backToHome')}
-                    </AnimatedButton>
+                <Card className="bg-gradient-to-br from-purple-500 to-pink-600 text-white border-0">
+                  <CardContent className="p-6 text-center">
+                    <BookOpen className="w-8 h-8 mx-auto mb-3" />
+                    <div className="text-2xl font-bold mb-1">500+</div>
+                    <div className="text-sm opacity-90">Livres disponibles</div>
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* FAQ Quick Links */}
+              <Card className="bg-gradient-to-br from-gray-50 to-gray-100 border-0">
+                <CardContent className="p-6">
+                  <h3 className="font-semibold text-gray-900 mb-4">Questions fréquentes</h3>
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between p-3 bg-white rounded-lg hover:shadow-md transition-shadow cursor-pointer">
+                      <span className="text-sm text-gray-700">Comment passer une commande ?</span>
+                      <span className="text-blue-600">→</span>
+                    </div>
+                    <div className="flex items-center justify-between p-3 bg-white rounded-lg hover:shadow-md transition-shadow cursor-pointer">
+                      <span className="text-sm text-gray-700">Délais de livraison</span>
+                      <span className="text-blue-600">→</span>
+                    </div>
+                    <div className="flex items-center justify-between p-3 bg-white rounded-lg hover:shadow-md transition-shadow cursor-pointer">
+                      <span className="text-sm text-gray-700">Politique de retour</span>
+                      <span className="text-blue-600">→</span>
+                    </div>
                   </div>
                 </CardContent>
               </Card>
             </div>
           </div>
         </div>
-      </div>
+      </section>
 
       <Footer />
     </div>

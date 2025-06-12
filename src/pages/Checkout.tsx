@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useCart } from "@/contexts/CartContext";
 import { useAuth } from "@/contexts/AuthContext";
@@ -16,7 +15,7 @@ import Footer from "@/components/Footer";
 import { ArrowLeft, CreditCard, Smartphone, Package } from "lucide-react";
 
 const Checkout = () => {
-  const { cart, getTotalPrice, clearCart } = useCart();
+  const { items, getTotalPrice, clearCart } = useCart();
   const { user } = useAuth();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
@@ -41,13 +40,13 @@ const Checkout = () => {
       return;
     }
 
-    if (cart.length === 0) {
+    if (items.length === 0) {
       navigate('/cart');
       return;
     }
 
     loadCustomerData();
-  }, [user, cart.length, navigate]);
+  }, [user, items.length, navigate]);
 
   const loadCustomerData = async () => {
     if (!user) return;
@@ -136,12 +135,12 @@ const Checkout = () => {
       }
 
       // Create order items
-      const orderItems = cart.map(item => ({
+      const orderItems = items.map(item => ({
         order_id: orderData.id,
         book_id: item.book_id,
         quantity: item.quantity,
-        unit_price: item.price,
-        total_price: item.price * item.quantity
+        unit_price: item.book.price,
+        total_price: item.book.price * item.quantity
       }));
 
       const { error: itemsError } = await supabase
@@ -193,7 +192,7 @@ const Checkout = () => {
     }).format(price);
   };
 
-  if (!user || cart.length === 0) {
+  if (!user || items.length === 0) {
     return null;
   }
 
@@ -391,15 +390,15 @@ const Checkout = () => {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {cart.map((item) => (
+                  {items.map((item) => (
                     <div key={item.id} className="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
                       <div className="flex-1">
-                        <h4 className="font-semibold text-gray-900">{item.title}</h4>
+                        <h4 className="font-semibold text-gray-900">{item.book.title}</h4>
                         <p className="text-sm text-gray-600">Quantité: {item.quantity}</p>
                       </div>
                       <div className="text-right">
-                        <p className="font-bold text-gray-900">{formatPrice(item.price * item.quantity)}</p>
-                        <p className="text-sm text-gray-600">{formatPrice(item.price)} / unité</p>
+                        <p className="font-bold text-gray-900">{formatPrice(item.book.price * item.quantity)}</p>
+                        <p className="text-sm text-gray-600">{formatPrice(item.book.price)} / unité</p>
                       </div>
                     </div>
                   ))}
