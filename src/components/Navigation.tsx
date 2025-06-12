@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X, User, LogOut } from "lucide-react";
@@ -61,8 +62,8 @@ const Navigation = () => {
             {user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="outline" size="icon" className="bg-white/10 border-white/20 hover:bg-white/20">
-                    <User className="h-4 w-4 text-white" />
+                  <Button variant="secondary" size="icon" className="bg-white/10 border-white/20 hover:bg-white/20 text-white">
+                    <User className="h-4 w-4" />
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
@@ -74,7 +75,7 @@ const Navigation = () => {
               </DropdownMenu>
             ) : (
               <Link to="/auth">
-                <Button variant="outline" className="border-white text-white hover:bg-white hover:text-blue-900">
+                <Button className="bg-white text-blue-900 hover:bg-gray-100 font-semibold">
                   Connexion
                 </Button>
               </Link>
@@ -115,20 +116,20 @@ const Navigation = () => {
                 
                 {user ? (
                   <Button
-                    variant="outline"
+                    variant="secondary"
                     size="sm"
                     onClick={() => {
                       signOut();
                       setIsOpen(false);
                     }}
-                    className="border-white text-white hover:bg-white hover:text-blue-900"
+                    className="bg-white/10 border-white/20 hover:bg-white/20 text-white"
                   >
                     <LogOut className="mr-2 h-4 w-4" />
                     Déconnexion
                   </Button>
                 ) : (
                   <Link to="/auth" onClick={() => setIsOpen(false)}>
-                    <Button variant="outline" size="sm" className="border-white text-white hover:bg-white hover:text-blue-900">
+                    <Button size="sm" className="bg-white text-blue-900 hover:bg-gray-100 font-semibold">
                       Connexion
                     </Button>
                   </Link>
