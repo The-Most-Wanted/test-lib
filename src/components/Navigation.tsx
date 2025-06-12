@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X, User, LogOut } from "lucide-react";
@@ -62,8 +61,8 @@ const Navigation = () => {
             {user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="outline" size="icon">
-                    <User className="h-4 w-4" />
+                  <Button variant="outline" size="icon" className="bg-white/10 border-white/20 hover:bg-white/20">
+                    <User className="h-4 w-4 text-white" />
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
@@ -75,7 +74,7 @@ const Navigation = () => {
               </DropdownMenu>
             ) : (
               <Link to="/auth">
-                <Button variant="outline">
+                <Button variant="outline" className="border-white text-white hover:bg-white hover:text-blue-900">
                   Connexion
                 </Button>
               </Link>
@@ -122,13 +121,14 @@ const Navigation = () => {
                       signOut();
                       setIsOpen(false);
                     }}
+                    className="border-white text-white hover:bg-white hover:text-blue-900"
                   >
                     <LogOut className="mr-2 h-4 w-4" />
                     Déconnexion
                   </Button>
                 ) : (
                   <Link to="/auth" onClick={() => setIsOpen(false)}>
-                    <Button variant="outline" size="sm">
+                    <Button variant="outline" size="sm" className="border-white text-white hover:bg-white hover:text-blue-900">
                       Connexion
                     </Button>
                   </Link>
