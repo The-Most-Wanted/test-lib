@@ -9,6 +9,117 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      activity_logs: {
+        Row: {
+          action: string
+          created_at: string
+          details: Json | null
+          id: string
+          ip_address: unknown | null
+          resource_id: string | null
+          resource_type: string
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          action: string
+          created_at?: string
+          details?: Json | null
+          id?: string
+          ip_address?: unknown | null
+          resource_id?: string | null
+          resource_type: string
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          action?: string
+          created_at?: string
+          details?: Json | null
+          id?: string
+          ip_address?: unknown | null
+          resource_id?: string | null
+          resource_type?: string
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      admin_users: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          permissions: Json | null
+          role: string
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          permissions?: Json | null
+          role?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          permissions?: Json | null
+          role?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      analytics_events: {
+        Row: {
+          created_at: string
+          event_category: string | null
+          event_label: string | null
+          event_name: string
+          event_value: number | null
+          id: string
+          ip_address: unknown | null
+          page_url: string | null
+          referrer: string | null
+          session_id: string | null
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          event_category?: string | null
+          event_label?: string | null
+          event_name: string
+          event_value?: number | null
+          id?: string
+          ip_address?: unknown | null
+          page_url?: string | null
+          referrer?: string | null
+          session_id?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          event_category?: string | null
+          event_label?: string | null
+          event_name?: string
+          event_value?: number | null
+          id?: string
+          ip_address?: unknown | null
+          page_url?: string | null
+          referrer?: string | null
+          session_id?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       books: {
         Row: {
           active: boolean | null
@@ -261,11 +372,45 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      order_statistics: {
+        Row: {
+          average_order_value: number | null
+          order_date: string | null
+          total_orders: number | null
+          total_revenue: number | null
+          unique_customers: number | null
+        }
+        Relationships: []
+      }
+      visitor_statistics: {
+        Row: {
+          add_to_cart_events: number | null
+          page_views: number | null
+          purchases: number | null
+          total_page_views: number | null
+          unique_sessions: number | null
+          unique_users: number | null
+          visit_date: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       generate_order_number: {
         Args: Record<PropertyKey, never>
+        Returns: string
+      }
+      is_admin: {
+        Args: { user_uuid?: string }
+        Returns: boolean
+      }
+      log_activity: {
+        Args: {
+          p_action: string
+          p_resource_type: string
+          p_resource_id?: string
+          p_details?: Json
+        }
         Returns: string
       }
     }

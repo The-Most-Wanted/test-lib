@@ -1,9 +1,10 @@
+
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 
 // Configuration Google Analytics 4
-const GA_MEASUREMENT_ID = 'G-GEBGMVDGCN'; // À remplacer par votre ID GA4
+const GA_MEASUREMENT_ID = 'G-GEBGMVDGCN';
 
 declare global {
   interface Window {
@@ -12,66 +13,54 @@ declare global {
   }
 }
 
-// Initialiser Google Analytics 4
-export const initGA4 = () => {
-  // Charger le script GA4
-  const script1 = document.createElement('script');
-  script1.async = true;
-  script1.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`;
-  document.head.appendChild(script1);
-
-  // Initialiser gtag
-  const script2 = document.createElement('script');
-  script2.innerHTML = `
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', '${GA_MEASUREMENT_ID}', {
-      page_title: document.title,
-      page_location: window.location.href,
-    });
-  `;
-  document.head.appendChild(script2);
-};
-
 // Hook pour tracker les pages vues
 export const usePageTracking = () => {
   const location = useLocation();
 
   useEffect(() => {
-    // Google Analytics 4
-    if (typeof window.gtag !== 'undefined') {
-      window.gtag('config', GA_MEASUREMENT_ID, {
-        page_title: document.title,
-        page_location: window.location.href,
-        page_path: location.pathname,
-      });
-    }
+    try {
+      // Google Analytics 4
+      if (typeof window !== 'undefined' && typeof window.gtag !== 'undefined') {
+        window.gtag('config', GA_MEASUREMENT_ID, {
+          page_title: document.title,
+          page_location: window.location.href,
+          page_path: location.pathname,
+        });
+      }
 
-    // Analytics personnalisés dans Supabase
-    trackCustomEvent('page_view', {
-      page_url: window.location.href,
-      page_path: location.pathname,
-      page_title: document.title,
-      referrer: document.referrer
-    });
+      // Analytics personnalisés dans Supabase
+      trackCustomEvent('page_view', {
+        page_url: window.location.href,
+        page_path: location.pathname,
+        page_title: document.title,
+        referrer: document.referrer
+      });
+    } catch (error) {
+      console.error('Error tracking page view:', error);
+    }
   }, [location]);
 };
 
 // Fonction pour tracker des événements personnalisés
 export const trackEvent = (eventName: string, parameters?: Record<string, any>) => {
-  // Google Analytics 4
-  if (typeof window.gtag !== 'undefined') {
-    window.gtag('event', eventName, parameters);
-  }
+  try {
+    // Google Analytics 4
+    if (typeof window !== 'undefined' && typeof window.gtag !== 'undefined') {
+      window.gtag('event', eventName, parameters);
+    }
 
-  // Analytics personnalisés
-  trackCustomEvent(eventName, parameters);
+    // Analytics personnalisés
+    trackCustomEvent(eventName, parameters);
+  } catch (error) {
+    console.error('Error tracking event:', error);
+  }
 };
 
 // Fonction pour enregistrer des événements dans Supabase
 const trackCustomEvent = async (eventName: string, parameters?: Record<string, any>) => {
   try {
+    if (typeof window === 'undefined') return;
+    
     const sessionId = getOrCreateSessionId();
     
     await supabase.from('analytics_events').insert({
@@ -91,17 +80,29 @@ const trackCustomEvent = async (eventName: string, parameters?: Record<string, a
 
 // Générer ou récupérer un ID de session
 const getOrCreateSessionId = (): string => {
-  let sessionId = sessionStorage.getItem('analytics_session_id');
-  if (!sessionId) {
-    sessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-    sessionStorage.setItem('analytics_session_id', sessionId);
+  try {
+    if (typeof window === 'undefined') return 'server_session';
+    
+    let sessionId = sessionStorage.getItem('analytics_session_id');
+    if (!sessionId) {
+      sessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      sessionStorage.setItem('analytics_session_id', sessionId);
+    }
+    return sessionId;
+  } catch (error) {
+    console.error('Error managing session ID:', error);
+    return `fallback_session_${Date.now()}`;
   }
-  return sessionId;
 };
 
 // Hook principal pour les analytics
 export const useAnalytics = () => {
-  usePageTracking();
+  // Utiliser le tracking des pages de manière conditionnelle
+  try {
+    usePageTracking();
+  } catch (error) {
+    console.error('Error in page tracking:', error);
+  }
 
   const trackAddToCart = (bookId: number, bookTitle: string, price: number) => {
     trackEvent('add_to_cart', {
