@@ -25,25 +25,25 @@ const Navigation = () => {
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md shadow-lg border-b border-gray-200/50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          {/* Logo amélioré et plus clair */}
-          <Link to="/" className="flex items-center space-x-3 group">
-            <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg flex items-center justify-center group-hover:from-indigo-600 group-hover:to-purple-600 transition-all duration-300 transform group-hover:scale-110 shadow-lg">
-              <BookOpen className="w-5 h-5 text-white" />
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-14 sm:h-16">
+          {/* Logo optimisé mobile */}
+          <Link to="/" className="flex items-center space-x-2 sm:space-x-3 group">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg flex items-center justify-center group-hover:from-indigo-600 group-hover:to-purple-600 transition-all duration-300 transform group-hover:scale-110 shadow-lg">
+              <BookOpen className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
             </div>
             <div className="flex flex-col">
-              <span className="font-playfair text-lg font-bold text-gray-900 group-hover:text-blue-600 transition-colors leading-none">
+              <span className="font-playfair text-base sm:text-lg font-bold text-gray-900 group-hover:text-blue-600 transition-colors leading-none">
                 Livres Kakpo
               </span>
-              <span className="text-xs text-gray-500 leading-none">
+              <span className="text-xs text-gray-500 leading-none hidden sm:block">
                 Littérature Africaine
               </span>
             </div>
           </Link>
 
           {/* Desktop Menu */}
-          <div className="hidden md:flex items-center space-x-8">
+          <div className="hidden md:flex items-center space-x-6 lg:space-x-8">
             <Link 
               to="/" 
               className="text-gray-700 hover:text-blue-600 font-medium transition-colors relative group"
@@ -67,17 +67,19 @@ const Navigation = () => {
             </Link>
           </div>
 
-          {/* Right Side Items */}
-          <div className="flex items-center space-x-3">
-            <LanguageToggle />
+          {/* Right Side Items optimisés mobile */}
+          <div className="flex items-center space-x-1 sm:space-x-3">
+            <div className="hidden sm:block">
+              <LanguageToggle />
+            </div>
             
-            {/* Cart Icon - Always visible when user is logged in */}
+            {/* Cart Icon optimisé mobile */}
             {user && (
               <Link to="/cart">
-                <Button variant="ghost" size="icon" className="relative hover:bg-blue-50 transition-colors">
-                  <ShoppingCart className="h-5 w-5 text-gray-700" />
+                <Button variant="ghost" size="icon" className="relative hover:bg-blue-50 transition-colors w-9 h-9 sm:w-10 sm:h-10">
+                  <ShoppingCart className="h-4 w-4 sm:h-5 sm:w-5 text-gray-700" />
                   {totalItems > 0 && (
-                    <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold min-w-[20px]">
+                    <span className="absolute -top-1 -right-1 sm:-top-2 sm:-right-2 bg-red-500 text-white text-xs rounded-full h-4 w-4 sm:h-5 sm:w-5 flex items-center justify-center font-bold text-[10px] sm:text-xs min-w-[16px] sm:min-w-[20px]">
                       {totalItems}
                     </span>
                   )}
@@ -90,13 +92,13 @@ const Navigation = () => {
                 <DropdownMenuTrigger asChild>
                   <Button 
                     variant="ghost" 
-                    className="flex items-center space-x-2 hover:bg-blue-50 border border-transparent hover:border-blue-200 transition-all duration-300 rounded-xl px-4 py-2"
+                    className="flex items-center space-x-1 sm:space-x-2 hover:bg-blue-50 border border-transparent hover:border-blue-200 transition-all duration-300 rounded-xl px-2 sm:px-4 py-2 h-9 sm:h-auto"
                   >
-                    <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full flex items-center justify-center">
-                      <User className="w-4 h-4 text-white" />
+                    <div className="w-6 h-6 sm:w-8 sm:h-8 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full flex items-center justify-center">
+                      <User className="w-3 h-3 sm:w-4 sm:h-4 text-white" />
                     </div>
                     <span className="hidden sm:block font-medium text-gray-700">{t('profile')}</span>
-                    <ChevronDown className="w-4 h-4 text-gray-500" />
+                    <ChevronDown className="w-3 h-3 sm:w-4 sm:h-4 text-gray-500" />
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-56 bg-white/95 backdrop-blur-md border border-gray-200/50 shadow-xl">
@@ -126,9 +128,10 @@ const Navigation = () => {
               </DropdownMenu>
             ) : (
               <Link to="/auth">
-                <Button className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold px-6 py-2 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
-                  <LogIn className="w-4 h-4 mr-2" />
-                  {t('login')}
+                <Button className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold px-3 sm:px-6 py-2 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl text-sm">
+                  <LogIn className="w-4 h-4 mr-1 sm:mr-2" />
+                  <span className="hidden sm:inline">{t('login')}</span>
+                  <span className="sm:hidden">Login</span>
                 </Button>
               </Link>
             )}
@@ -136,53 +139,57 @@ const Navigation = () => {
             {/* Mobile Menu Button */}
             <Button
               variant="ghost"
-              className="md:hidden p-2 hover:bg-gray-100 rounded-lg"
+              className="md:hidden p-2 hover:bg-gray-100 rounded-lg w-9 h-9"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
             >
-              {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              {isMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </Button>
           </div>
         </div>
 
-        {/* Mobile Menu */}
+        {/* Mobile Menu optimisé */}
         {isMenuOpen && (
-          <div className="md:hidden absolute top-16 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-gray-200/50 shadow-lg animate-fade-in">
+          <div className="md:hidden absolute top-14 sm:top-16 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-gray-200/50 shadow-lg animate-fade-in">
             <div className="px-4 py-6 space-y-4">
               <Link 
                 to="/" 
-                className="block text-gray-700 hover:text-blue-600 font-medium py-2 transition-colors"
+                className="block text-gray-700 hover:text-blue-600 font-medium py-3 transition-colors border-b border-gray-100"
                 onClick={() => setIsMenuOpen(false)}
               >
                 {t('home')}
               </Link>
               <Link 
                 to="/catalogue" 
-                className="block text-gray-700 hover:text-blue-600 font-medium py-2 transition-colors"
+                className="block text-gray-700 hover:text-blue-600 font-medium py-3 transition-colors border-b border-gray-100"
                 onClick={() => setIsMenuOpen(false)}
               >
                 {t('catalogue')}
               </Link>
               <Link 
                 to="/contact" 
-                className="block text-gray-700 hover:text-blue-600 font-medium py-2 transition-colors"
+                className="block text-gray-700 hover:text-blue-600 font-medium py-3 transition-colors border-b border-gray-100"
                 onClick={() => setIsMenuOpen(false)}
               >
                 {t('contact')}
               </Link>
               
+              {/* Language toggle pour mobile */}
+              <div className="py-3 border-b border-gray-100">
+                <LanguageToggle />
+              </div>
+              
               {user && (
                 <>
-                  <hr className="border-gray-200" />
                   <Link 
                     to="/profile" 
-                    className="block text-gray-700 hover:text-blue-600 font-medium py-2 transition-colors"
+                    className="block text-gray-700 hover:text-blue-600 font-medium py-3 transition-colors border-b border-gray-100"
                     onClick={() => setIsMenuOpen(false)}
                   >
                     {t('myProfile')}
                   </Link>
                   <Link 
                     to="/cart" 
-                    className="flex items-center justify-between text-gray-700 hover:text-blue-600 font-medium py-2 transition-colors"
+                    className="flex items-center justify-between text-gray-700 hover:text-blue-600 font-medium py-3 transition-colors border-b border-gray-100"
                     onClick={() => setIsMenuOpen(false)}
                   >
                     <span>{t('myCart')}</span>
@@ -197,7 +204,7 @@ const Navigation = () => {
                       signOut();
                       setIsMenuOpen(false);
                     }}
-                    className="block w-full text-left text-red-600 hover:text-red-700 font-medium py-2 transition-colors"
+                    className="block w-full text-left text-red-600 hover:text-red-700 font-medium py-3 transition-colors"
                   >
                     {t('logout')}
                   </button>
