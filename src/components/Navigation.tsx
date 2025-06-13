@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
@@ -13,7 +14,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button";
-import { LogIn, LogOut, Menu, User, X, ChevronDown, ShoppingCart } from "lucide-react";
+import { LogIn, LogOut, Menu, User, X, ChevronDown, ShoppingCart, BookOpen } from "lucide-react";
 
 const Navigation = () => {
   const { user, signOut } = useAuth();
@@ -26,14 +27,19 @@ const Navigation = () => {
     <nav className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md shadow-lg border-b border-gray-200/50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          {/* Logo */}
+          {/* Logo amélioré et plus clair */}
           <Link to="/" className="flex items-center space-x-3 group">
-            <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg flex items-center justify-center group-hover:from-indigo-600 group-hover:to-purple-600 transition-all duration-300 transform group-hover:scale-110">
-              <span className="text-white font-bold text-lg">MK</span>
+            <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg flex items-center justify-center group-hover:from-indigo-600 group-hover:to-purple-600 transition-all duration-300 transform group-hover:scale-110 shadow-lg">
+              <BookOpen className="w-5 h-5 text-white" />
             </div>
-            <span className="font-playfair text-xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors">
-              Livres Kakpo
-            </span>
+            <div className="flex flex-col">
+              <span className="font-playfair text-lg font-bold text-gray-900 group-hover:text-blue-600 transition-colors leading-none">
+                Livres Kakpo
+              </span>
+              <span className="text-xs text-gray-500 leading-none">
+                Littérature Africaine
+              </span>
+            </div>
           </Link>
 
           {/* Desktop Menu */}
