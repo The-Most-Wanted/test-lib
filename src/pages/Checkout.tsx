@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { supabase } from "@/integrations/supabase/client";
+import { useAnalytics } from "@/hooks/useAnalytics";
 import { toast } from "sonner";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
@@ -17,6 +18,7 @@ import { ArrowLeft, CreditCard, Smartphone, Package } from "lucide-react";
 const Checkout = () => {
   const { items, getTotalPrice, clearCart } = useCart();
   const { user } = useAuth();
+  const { trackPurchase } = useAnalytics();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [customer, setCustomer] = useState<any>(null);
@@ -151,6 +153,9 @@ const Checkout = () => {
         console.error('Order items error:', itemsError);
         throw new Error('Erreur lors de l\'ajout des articles');
       }
+
+      // Track purchase analytics
+      trackPurchase(orderData.id, getTotalPrice(), items);
 
       // Clear cart
       await clearCart();

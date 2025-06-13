@@ -1,7 +1,7 @@
-
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './AuthContext';
+import { useAnalytics } from '@/hooks/useAnalytics';
 import { toast } from 'sonner';
 
 interface CartItem {
@@ -43,6 +43,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   const [items, setItems] = useState<CartItem[]>([]);
   const [loading, setLoading] = useState(false);
   const { user } = useAuth();
+  const { trackAddToCart } = useAnalytics();
 
   // Load cart items when user changes
   useEffect(() => {
@@ -89,6 +90,13 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
       return;
     }
 
+    // Get book details for analytics
+    const { data: bookData } = await supabase
+      .from('books')
+      .select('title, price')
+      .eq('id', bookId)
+      .single();
+
     // Check if item already exists in cart
     const existingItem = items.find(item => item.book_id === bookId);
     
@@ -110,6 +118,12 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
       toast.error('Erreur lors de l\'ajout au panier');
     } else {
       toast.success('Livre ajouté au panier');
+      
+      // Track analytics event
+      if (bookData) {
+        trackAddToCart(bookId, bookData.title, bookData.price);
+      }
+      
       await loadCartItems();
     }
   };

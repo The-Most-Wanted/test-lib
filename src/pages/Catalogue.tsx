@@ -1,10 +1,10 @@
-
 import { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/hooks/useLanguage";
 import { useCart } from "@/contexts/CartContext";
 import { useAuth } from "@/contexts/AuthContext";
+import { useAnalytics } from "@/hooks/useAnalytics";
 import { supabase } from "@/integrations/supabase/client";
 import { BookOpen, ShoppingCart, Eye, Star, Grid, List } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -30,6 +30,7 @@ const Catalogue = () => {
   const { t, language } = useLanguage();
   const { addToCart } = useCart();
   const { user } = useAuth();
+  const { trackSearch } = useAnalytics();
   const navigate = useNavigate();
   const [books, setBooks] = useState<Book[]>([]);
   const [filteredBooks, setFilteredBooks] = useState<Book[]>([]);
@@ -78,6 +79,9 @@ const Catalogue = () => {
                description.toLowerCase().includes(searchTerm.toLowerCase()) ||
                genre.toLowerCase().includes(searchTerm.toLowerCase());
       });
+
+      // Track search
+      trackSearch(searchTerm, filtered.length);
     }
 
     // Filter by genre

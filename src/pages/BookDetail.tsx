@@ -7,6 +7,7 @@ import AnimatedButton from "@/components/AnimatedButton";
 import { useLanguage } from "@/hooks/useLanguage";
 import { useCart } from "@/contexts/CartContext";
 import { useAuth } from "@/contexts/AuthContext";
+import { useAnalytics } from "@/hooks/useAnalytics";
 import { supabase } from "@/integrations/supabase/client";
 import { ArrowLeft, BookOpen, Calendar, Building, Mail, Sparkles, Eye, ShoppingCart } from "lucide-react";
 import { toast } from "sonner";
@@ -32,6 +33,7 @@ const BookDetail = () => {
   const { t, language } = useLanguage();
   const { addToCart } = useCart();
   const { user } = useAuth();
+  const { trackBookView } = useAnalytics();
   const [book, setBook] = useState<Book | null>(null);
   const [otherBooks, setOtherBooks] = useState<Book[]>([]);
   const [loading, setLoading] = useState(true);
@@ -58,6 +60,9 @@ const BookDetail = () => {
       setBook(null);
     } else {
       setBook(bookData);
+      
+      // Track book view
+      trackBookView(bookData.id, language === 'fr' ? bookData.title : bookData.title_en);
       
       // Load other books (excluding current one)
       const { data: otherBooksData } = await supabase
