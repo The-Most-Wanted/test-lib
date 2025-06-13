@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useRealtime, useRealtimeActivityLogs } from '@/hooks/useRealtime';
+import { useRealtimeOrders, useRealtimeActivityLogs } from '@/hooks/useRealtime';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import { 
@@ -72,7 +72,7 @@ const Admin = () => {
   const [orderStats, setOrderStats] = useState<any[]>([]);
   const [visitorStats, setVisitorStats] = useState<any[]>([]);
 
-  const { newOrders, clearNewOrders } = useRealtime();
+  const { newOrders, clearNewOrders } = useRealtimeOrders();
   const { activities } = useRealtimeActivityLogs();
 
   useEffect(() => {
