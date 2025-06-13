@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 
 // Configuration Google Analytics 4
-const GA_MEASUREMENT_ID = 'G-XXXXXXXXXX'; // À remplacer par votre ID GA4
+const GA_MEASUREMENT_ID = 'G-GEBGMVDGCN'; // À remplacer par votre ID GA4
 
 declare global {
   interface Window {
