@@ -19,8 +19,8 @@ export const usePageTracking = () => {
 
   useEffect(() => {
     try {
-      // Google Analytics 4
-      if (typeof window !== 'undefined' && typeof window.gtag !== 'undefined') {
+      // Vérifier que gtag est disponible avant de l'utiliser
+      if (typeof window !== 'undefined' && window.gtag && typeof window.gtag === 'function') {
         window.gtag('config', GA_MEASUREMENT_ID, {
           page_title: document.title,
           page_location: window.location.href,
@@ -28,15 +28,17 @@ export const usePageTracking = () => {
         });
       }
 
-      // Analytics personnalisés dans Supabase
+      // Analytics personnalisés dans Supabase avec gestion d'erreur
       trackCustomEvent('page_view', {
         page_url: window.location.href,
         page_path: location.pathname,
         page_title: document.title,
         referrer: document.referrer
+      }).catch(error => {
+        console.warn('Analytics tracking failed:', error);
       });
     } catch (error) {
-      console.error('Error tracking page view:', error);
+      console.warn('Page tracking failed:', error);
     }
   }, [location]);
 };
@@ -44,26 +46,28 @@ export const usePageTracking = () => {
 // Fonction pour tracker des événements personnalisés
 export const trackEvent = (eventName: string, parameters?: Record<string, any>) => {
   try {
-    // Google Analytics 4
-    if (typeof window !== 'undefined' && typeof window.gtag !== 'undefined') {
+    // Google Analytics 4 avec vérification
+    if (typeof window !== 'undefined' && window.gtag && typeof window.gtag === 'function') {
       window.gtag('event', eventName, parameters);
     }
 
-    // Analytics personnalisés
-    trackCustomEvent(eventName, parameters);
+    // Analytics personnalisés avec gestion d'erreur
+    trackCustomEvent(eventName, parameters).catch(error => {
+      console.warn('Event tracking failed:', error);
+    });
   } catch (error) {
-    console.error('Error tracking event:', error);
+    console.warn('Event tracking failed:', error);
   }
 };
 
-// Fonction pour enregistrer des événements dans Supabase
-const trackCustomEvent = async (eventName: string, parameters?: Record<string, any>) => {
+// Fonction pour enregistrer des événements dans Supabase avec retry
+const trackCustomEvent = async (eventName: string, parameters?: Record<string, any>, retryCount = 0): Promise<void> => {
   try {
     if (typeof window === 'undefined') return;
     
     const sessionId = getOrCreateSessionId();
     
-    await supabase.from('analytics_events').insert({
+    const { error } = await supabase.from('analytics_events').insert({
       session_id: sessionId,
       event_name: eventName,
       event_category: parameters?.category || 'general',
@@ -73,12 +77,21 @@ const trackCustomEvent = async (eventName: string, parameters?: Record<string, a
       referrer: document.referrer,
       user_agent: navigator.userAgent
     });
+
+    if (error) {
+      throw error;
+    }
   } catch (error) {
-    console.error('Erreur lors de l\'enregistrement de l\'événement:', error);
+    // Retry logic pour éviter les échecs temporaires
+    if (retryCount < 2) {
+      setTimeout(() => trackCustomEvent(eventName, parameters, retryCount + 1), 1000);
+    } else {
+      console.warn('Failed to track event after retries:', error);
+    }
   }
 };
 
-// Générer ou récupérer un ID de session
+// Générer ou récupérer un ID de session avec fallback robuste
 const getOrCreateSessionId = (): string => {
   try {
     if (typeof window === 'undefined') return 'server_session';
@@ -90,19 +103,21 @@ const getOrCreateSessionId = (): string => {
     }
     return sessionId;
   } catch (error) {
-    console.error('Error managing session ID:', error);
-    return `fallback_session_${Date.now()}`;
+    console.warn('Session ID management failed:', error);
+    return `fallback_session_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`;
   }
 };
 
-// Hook principal pour les analytics
+// Hook principal pour les analytics avec gestion d'erreur
 export const useAnalytics = () => {
-  // Utiliser le tracking des pages de manière conditionnelle
-  try {
-    usePageTracking();
-  } catch (error) {
-    console.error('Error in page tracking:', error);
-  }
+  // Utiliser le tracking des pages de manière conditionnelle avec gestion d'erreur
+  useEffect(() => {
+    try {
+      usePageTracking();
+    } catch (error) {
+      console.warn('Analytics initialization failed:', error);
+    }
+  }, []);
 
   const trackAddToCart = (bookId: number, bookTitle: string, price: number) => {
     trackEvent('add_to_cart', {
