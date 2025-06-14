@@ -95,20 +95,28 @@ const Hero = () => {
                   </button>
                 </Link>
                 
-                <Link to="/contact" className="w-full">
-                  <button className="group w-full relative overflow-hidden border-2 border-white/80 hover:border-white text-white hover:bg-white hover:text-amber-900 font-bold py-4 px-6 rounded-2xl transition-all duration-500 transform hover:scale-105 shadow-2xl hover:shadow-white/25">
-                    <div className="relative flex items-center justify-center space-x-3">
-                      <div className="w-8 h-8 border-2 border-current rounded-full flex items-center justify-center group-hover:rotate-12 transition-transform duration-300">
-                        <Star className="w-5 h-5" />
-                      </div>
-                      <div className="text-left">
-                        <div className="text-lg font-bold">Découvrir l'Auteur</div>
-                        <div className="text-sm opacity-90">Son parcours et ses œuvres</div>
-                      </div>
-                      <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
+                {/* CORRECTION: Lien vers la page About au lieu de Contact */}
+                <button
+                  onClick={() => {
+                    // Scroll vers la section About
+                    const aboutSection = document.querySelector('#about-section');
+                    if (aboutSection) {
+                      aboutSection.scrollIntoView({ behavior: 'smooth' });
+                    }
+                  }}
+                  className="group w-full relative overflow-hidden border-2 border-white/80 hover:border-white text-white hover:bg-white hover:text-amber-900 font-bold py-4 px-6 rounded-2xl transition-all duration-500 transform hover:scale-105 shadow-2xl hover:shadow-white/25"
+                >
+                  <div className="relative flex items-center justify-center space-x-3">
+                    <div className="w-8 h-8 border-2 border-current rounded-full flex items-center justify-center group-hover:rotate-12 transition-transform duration-300">
+                      <Star className="w-5 h-5" />
                     </div>
-                  </button>
-                </Link>
+                    <div className="text-left">
+                      <div className="text-lg font-bold">Découvrir l'Auteur</div>
+                      <div className="text-sm opacity-90">Son parcours et ses œuvres</div>
+                    </div>
+                    <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
+                  </div>
+                </button>
               </div>
             </div>
 
@@ -176,14 +184,20 @@ const Hero = () => {
                     </div>
                   </div>
                   
-                  {/* Bouton d'action optimisé mobile */}
+                  {/* Bouton d'action optimisé mobile - CORRECTION: Scroll vers About */}
                   <div className="mt-4 sm:mt-8">
-                    <Link to="/contact">
-                      <button className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg">
-                        <Play className="w-4 h-4 inline mr-2" />
-                        Découvrir son parcours
-                      </button>
-                    </Link>
+                    <button
+                      onClick={() => {
+                        const aboutSection = document.querySelector('#about-section');
+                        if (aboutSection) {
+                          aboutSection.scrollIntoView({ behavior: 'smooth' });
+                        }
+                      }}
+                      className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg"
+                    >
+                      <Play className="w-4 h-4 inline mr-2" />
+                      Découvrir son parcours
+                    </button>
                   </div>
                 </div>
               </div>

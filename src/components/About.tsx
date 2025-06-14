@@ -41,7 +41,7 @@ const About = () => {
   ];
 
   return (
-    <section className="py-20 bg-gradient-to-br from-amber-50 via-orange-50/30 to-red-50/50 relative overflow-hidden">
+    <section id="about-section" className="py-20 bg-gradient-to-br from-amber-50 via-orange-50/30 to-red-50/50 relative overflow-hidden">
       {/* Éléments décoratifs de fond */}
       <div className="absolute inset-0">
         <div className="absolute top-20 left-20 w-64 h-64 bg-amber-500/5 rounded-full blur-3xl"></div>
@@ -151,7 +151,7 @@ const About = () => {
                 <div className="w-20 h-20 bg-white/10 backdrop-blur-md rounded-2xl mx-auto mb-4 flex items-center justify-center group-hover:bg-white/20 transition-all duration-300">
                   <BookOpen className="w-10 h-10 text-yellow-400" />
                 </div>
-                <div className="text-4xl font-bold mb-2 text-yellow-400">15+</div>
+                <div className="text-4xl font-bold mb-2 text-yellow-400">29+</div>
                 <div className="text-orange-200 text-sm">Ouvrages Publiés</div>
               </div>
               
