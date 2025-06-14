@@ -15,19 +15,19 @@ const About = () => {
       icon: <BookOpen className="w-6 h-6" />,
       title: "Professeur Émérite",
       description: "25+ années d'enseignement à l'Université d'Abomey-Calavi",
-      color: "from-blue-500 to-indigo-500"
+      color: "from-amber-500 to-orange-500"
     },
     {
       icon: <Users className="w-6 h-6" />,
       title: "Leader Spirituel",
       description: "Président du Comité des rites Vodun depuis 2023",
-      color: "from-purple-500 to-pink-500"
+      color: "from-orange-500 to-red-500"
     },
     {
       icon: <Globe className="w-6 h-6" />,
       title: "Homme Politique",
       description: "Ancien ministre et député engagé pour l'éducation",
-      color: "from-green-500 to-emerald-500"
+      color: "from-red-500 to-amber-500"
     }
   ];
 
@@ -41,23 +41,23 @@ const About = () => {
   ];
 
   return (
-    <section className="py-20 bg-gradient-to-br from-gray-50 via-blue-50/30 to-indigo-50/50 relative overflow-hidden">
+    <section className="py-20 bg-gradient-to-br from-amber-50 via-orange-50/30 to-red-50/50 relative overflow-hidden">
       {/* Éléments décoratifs de fond */}
       <div className="absolute inset-0">
-        <div className="absolute top-20 left-20 w-64 h-64 bg-blue-500/5 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-20 right-20 w-80 h-80 bg-purple-500/5 rounded-full blur-3xl"></div>
+        <div className="absolute top-20 left-20 w-64 h-64 bg-amber-500/5 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-20 right-20 w-80 h-80 bg-orange-500/5 rounded-full blur-3xl"></div>
       </div>
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* En-tête de section */}
         <div className="text-center mb-16 animate-fade-in">
-          <h2 className="font-playfair text-4xl sm:text-5xl font-bold bg-gradient-to-r from-gray-900 via-blue-900 to-indigo-900 bg-clip-text text-transparent mb-6">
+          <h2 className="font-playfair text-4xl sm:text-5xl font-bold bg-gradient-to-r from-amber-900 via-orange-900 to-red-900 bg-clip-text text-transparent mb-6">
             Un Parcours d'Excellence
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
             Découvrez l'homme derrière l'œuvre : un parcours exceptionnel au service de la culture, de l'éducation et du patrimoine africain.
           </p>
-          <div className="mt-6 w-24 h-1 bg-gradient-to-r from-blue-600 to-indigo-600 mx-auto rounded-full"></div>
+          <div className="mt-6 w-24 h-1 bg-gradient-to-r from-amber-600 to-orange-600 mx-auto rounded-full"></div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mb-20">
@@ -65,7 +65,7 @@ const About = () => {
           <div className="animate-fade-in space-y-8">
             <div className="bg-white/80 backdrop-blur-md rounded-2xl p-8 shadow-xl border border-gray-100">
               <div className="flex items-start space-x-4 mb-6">
-                <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center flex-shrink-0">
+                <div className="w-12 h-12 bg-gradient-to-r from-amber-600 to-orange-600 rounded-xl flex items-center justify-center flex-shrink-0">
                   <Quote className="w-6 h-6 text-white" />
                 </div>
                 <div>
@@ -90,13 +90,13 @@ const About = () => {
             {/* Domaines d'expertise */}
             <div className="bg-white/80 backdrop-blur-md rounded-2xl p-8 shadow-xl border border-gray-100">
               <h4 className="text-xl font-bold text-gray-900 mb-6 flex items-center">
-                <BookOpen className="w-6 h-6 mr-3 text-blue-600" />
+                <BookOpen className="w-6 h-6 mr-3 text-amber-600" />
                 Domaines d'Expertise
               </h4>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {expertise.map((item, index) => (
-                  <div key={index} className="flex items-center space-x-3 p-3 bg-blue-50 rounded-lg">
-                    <CheckCircle className="w-4 h-4 text-blue-600 flex-shrink-0" />
+                  <div key={index} className="flex items-center space-x-3 p-3 bg-amber-50 rounded-lg">
+                    <CheckCircle className="w-4 h-4 text-amber-600 flex-shrink-0" />
                     <span className="text-sm text-gray-700 font-medium">{item}</span>
                   </div>
                 ))}
@@ -120,7 +120,7 @@ const About = () => {
                       </div>
                     </div>
                     <div className="flex-1">
-                      <h4 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
+                      <h4 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-amber-600 transition-colors">
                         {achievement.title}
                       </h4>
                       <p className="text-gray-600 leading-relaxed">
@@ -136,12 +136,12 @@ const About = () => {
 
         {/* Section statistiques améliorée */}
         <div className="animate-fade-in" style={{ animationDelay: '0.4s' }}>
-          <div className="bg-gradient-to-r from-blue-900 via-indigo-900 to-purple-900 rounded-3xl p-8 md:p-12 text-white shadow-2xl">
+          <div className="bg-gradient-to-r from-amber-900 via-orange-900 to-red-900 rounded-3xl p-8 md:p-12 text-white shadow-2xl">
             <div className="text-center mb-12">
               <h3 className="text-3xl font-playfair font-bold mb-4">
                 Impact et Reconnaissance
               </h3>
-              <p className="text-blue-200 text-lg max-w-2xl mx-auto">
+              <p className="text-orange-200 text-lg max-w-2xl mx-auto">
                 Des décennies d'engagement au service de l'excellence académique et culturelle
               </p>
             </div>
@@ -152,7 +152,7 @@ const About = () => {
                   <BookOpen className="w-10 h-10 text-yellow-400" />
                 </div>
                 <div className="text-4xl font-bold mb-2 text-yellow-400">15+</div>
-                <div className="text-blue-200 text-sm">Ouvrages Publiés</div>
+                <div className="text-orange-200 text-sm">Ouvrages Publiés</div>
               </div>
               
               <div className="text-center group">
@@ -160,7 +160,7 @@ const About = () => {
                   <Award className="w-10 h-10 text-yellow-400" />
                 </div>
                 <div className="text-4xl font-bold mb-2 text-yellow-400">25+</div>
-                <div className="text-blue-200 text-sm">Années d'Enseignement</div>
+                <div className="text-orange-200 text-sm">Années d'Enseignement</div>
               </div>
               
               <div className="text-center group">
@@ -168,7 +168,7 @@ const About = () => {
                   <Users className="w-10 h-10 text-yellow-400" />
                 </div>
                 <div className="text-4xl font-bold mb-2 text-yellow-400">1000+</div>
-                <div className="text-blue-200 text-sm">Étudiants Formés</div>
+                <div className="text-orange-200 text-sm">Étudiants Formés</div>
               </div>
               
               <div className="text-center group">
@@ -176,7 +176,7 @@ const About = () => {
                   <Globe className="w-10 h-10 text-yellow-400" />
                 </div>
                 <div className="text-4xl font-bold mb-2 text-yellow-400">5+</div>
-                <div className="text-blue-200 text-sm">Pays d'Influence</div>
+                <div className="text-orange-200 text-sm">Pays d'Influence</div>
               </div>
             </div>
           </div>

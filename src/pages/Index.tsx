@@ -1,4 +1,3 @@
-
 import Navigation from "@/components/Navigation";
 import Hero from "@/components/Hero";
 import About from "@/components/About";
@@ -41,7 +40,7 @@ const Index = () => {
                 alt="Professeur Mahougnon KAKPO"
                 className="w-full h-80 object-cover group-hover:scale-110 transition-transform duration-500"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <div className="absolute inset-0 bg-gradient-to-t from-amber-900/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               <div className="absolute bottom-4 left-4 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                 <p className="font-semibold">Portrait officiel</p>
               </div>
@@ -53,7 +52,7 @@ const Index = () => {
                 alt="Professeur Mahougnon KAKPO en conférence"
                 className="w-full h-80 object-cover group-hover:scale-110 transition-transform duration-500"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <div className="absolute inset-0 bg-gradient-to-t from-orange-900/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               <div className="absolute bottom-4 left-4 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                 <p className="font-semibold">En conférence</p>
               </div>
@@ -65,7 +64,7 @@ const Index = () => {
                 alt="Professeur Mahougnon KAKPO en tenue traditionnelle"
                 className="w-full h-80 object-cover group-hover:scale-110 transition-transform duration-500"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <div className="absolute inset-0 bg-gradient-to-t from-red-900/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               <div className="absolute bottom-4 left-4 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                 <p className="font-semibold">Tenue traditionnelle</p>
               </div>
@@ -77,7 +76,7 @@ const Index = () => {
                 alt="Professeur Mahougnon KAKPO en visite culturelle"
                 className="w-full h-80 object-cover group-hover:scale-110 transition-transform duration-500"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <div className="absolute inset-0 bg-gradient-to-t from-amber-900/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               <div className="absolute bottom-4 left-4 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                 <p className="font-semibold">Visite culturelle</p>
               </div>

@@ -1,4 +1,3 @@
-
 import AnimatedButton from "@/components/AnimatedButton";
 import { Link } from "react-router-dom";
 import { useLanguage } from "@/hooks/useLanguage";
@@ -11,15 +10,15 @@ const Hero = () => {
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background optimisé pour mobile */}
       <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-amber-900 via-orange-900 to-red-900"></div>
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1481627834876-b7833e8f5570')] bg-cover bg-center opacity-20"></div>
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-900/95 via-indigo-900/90 to-purple-900/95"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-amber-900/95 via-orange-900/90 to-red-900/95"></div>
       </div>
       
       {/* Éléments décoratifs optimisés */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-4 left-4 w-32 h-32 sm:top-20 sm:left-20 sm:w-72 sm:h-72 bg-blue-500/10 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-4 right-4 w-40 h-40 sm:bottom-20 sm:right-20 sm:w-96 sm:h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        <div className="absolute top-4 left-4 w-32 h-32 sm:top-20 sm:left-20 sm:w-72 sm:h-72 bg-amber-500/10 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-4 right-4 w-40 h-40 sm:bottom-20 sm:right-20 sm:w-96 sm:h-96 bg-orange-500/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
       </div>
 
       {/* Contenu principal avec meilleure responsivité mobile */}
@@ -64,15 +63,15 @@ const Hero = () => {
               {/* Citation optimisée mobile */}
               <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-xl sm:rounded-2xl p-3 sm:p-6 mb-4 sm:mb-8">
                 <Quote className="w-5 h-5 sm:w-8 sm:h-8 text-yellow-400 mb-2 sm:mb-4 mx-auto lg:mx-0" />
-                <p className="text-sm sm:text-lg lg:text-xl text-blue-100 leading-relaxed font-light italic">
+                <p className="text-sm sm:text-lg lg:text-xl text-orange-100 leading-relaxed font-light italic">
                   "La littérature africaine est le miroir de notre âme collective, le gardien de nos traditions et le pont vers l'avenir."
                 </p>
-                <div className="mt-2 sm:mt-4 text-xs sm:text-base text-blue-200">
+                <div className="mt-2 sm:mt-4 text-xs sm:text-base text-orange-200">
                   — Professeur Mahougnon Kakpo
                 </div>
               </div>
               
-              <p className="text-sm sm:text-lg lg:text-xl text-blue-100 leading-relaxed font-light px-2 lg:px-0">
+              <p className="text-sm sm:text-lg lg:text-xl text-orange-100 leading-relaxed font-light px-2 lg:px-0">
                 Découvrez l'univers fascinant de la littérature africaine contemporaine et explorez les œuvres qui célèbrent la richesse culturelle et spirituelle du Bénin et de l'Afrique.
               </p>
             </div>
@@ -81,7 +80,7 @@ const Hero = () => {
             <div className="animate-fade-in" style={{animationDelay: '0.6s'}}>
               <div className="flex flex-col gap-3 sm:gap-4 px-2 lg:px-0">
                 <Link to="/catalogue" className="w-full">
-                  <button className="group w-full relative overflow-hidden bg-gradient-to-r from-emerald-500 via-blue-500 to-purple-500 hover:from-emerald-600 hover:via-blue-600 hover:to-purple-600 text-white font-bold py-4 px-6 rounded-2xl transition-all duration-500 transform hover:scale-105 shadow-2xl hover:shadow-emerald-500/25">
+                  <button className="group w-full relative overflow-hidden bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 hover:from-amber-600 hover:via-orange-600 hover:to-red-600 text-white font-bold py-4 px-6 rounded-2xl transition-all duration-500 transform hover:scale-105 shadow-2xl hover:shadow-amber-500/25">
                     <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                     <div className="relative flex items-center justify-center space-x-3">
                       <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center group-hover:rotate-12 transition-transform duration-300">
@@ -97,7 +96,7 @@ const Hero = () => {
                 </Link>
                 
                 <Link to="/contact" className="w-full">
-                  <button className="group w-full relative overflow-hidden border-2 border-white/80 hover:border-white text-white hover:bg-white hover:text-gray-900 font-bold py-4 px-6 rounded-2xl transition-all duration-500 transform hover:scale-105 shadow-2xl hover:shadow-white/25">
+                  <button className="group w-full relative overflow-hidden border-2 border-white/80 hover:border-white text-white hover:bg-white hover:text-amber-900 font-bold py-4 px-6 rounded-2xl transition-all duration-500 transform hover:scale-105 shadow-2xl hover:shadow-white/25">
                     <div className="relative flex items-center justify-center space-x-3">
                       <div className="w-8 h-8 border-2 border-current rounded-full flex items-center justify-center group-hover:rotate-12 transition-transform duration-300">
                         <Star className="w-5 h-5" />
@@ -116,27 +115,27 @@ const Hero = () => {
             {/* Stats optimisées mobile */}
             <div className="animate-fade-in grid grid-cols-3 gap-2 sm:gap-6 pt-4 sm:pt-8 px-2 lg:px-0" style={{animationDelay: '0.9s'}}>
               <div className="text-center group">
-                <div className="w-10 h-10 sm:w-16 sm:h-16 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-xl mx-auto mb-2 flex items-center justify-center shadow-xl group-hover:shadow-2xl group-hover:scale-110 transition-all duration-300">
+                <div className="w-10 h-10 sm:w-16 sm:h-16 bg-gradient-to-r from-amber-500 to-orange-500 rounded-xl mx-auto mb-2 flex items-center justify-center shadow-xl group-hover:shadow-2xl group-hover:scale-110 transition-all duration-300">
                   <BookOpen className="w-4 h-4 sm:w-8 sm:h-8 text-white" />
                 </div>
                 <div className="text-lg sm:text-3xl font-bold text-white mb-1">15+</div>
-                <div className="text-blue-200 text-xs leading-tight">Livres<br />Publiés</div>
+                <div className="text-orange-200 text-xs leading-tight">Livres<br />Publiés</div>
               </div>
               
               <div className="text-center group">
-                <div className="w-10 h-10 sm:w-16 sm:h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl mx-auto mb-2 flex items-center justify-center shadow-xl group-hover:shadow-2xl group-hover:scale-110 transition-all duration-300">
+                <div className="w-10 h-10 sm:w-16 sm:h-16 bg-gradient-to-r from-orange-500 to-red-500 rounded-xl mx-auto mb-2 flex items-center justify-center shadow-xl group-hover:shadow-2xl group-hover:scale-110 transition-all duration-300">
                   <Award className="w-4 h-4 sm:w-8 sm:h-8 text-white" />
                 </div>
                 <div className="text-lg sm:text-3xl font-bold text-white mb-1">25+</div>
-                <div className="text-blue-200 text-xs leading-tight">Années<br />d'Enseignement</div>
+                <div className="text-orange-200 text-xs leading-tight">Années<br />d'Enseignement</div>
               </div>
               
               <div className="text-center group">
-                <div className="w-10 h-10 sm:w-16 sm:h-16 bg-gradient-to-r from-green-500 to-emerald-500 rounded-xl mx-auto mb-2 flex items-center justify-center shadow-xl group-hover:shadow-2xl group-hover:scale-110 transition-all duration-300">
+                <div className="w-10 h-10 sm:w-16 sm:h-16 bg-gradient-to-r from-red-500 to-amber-500 rounded-xl mx-auto mb-2 flex items-center justify-center shadow-xl group-hover:shadow-2xl group-hover:scale-110 transition-all duration-300">
                   <Users className="w-4 h-4 sm:w-8 sm:h-8 text-white" />
                 </div>
                 <div className="text-lg sm:text-3xl font-bold text-white mb-1">1000+</div>
-                <div className="text-blue-200 text-xs leading-tight">Lecteurs<br />Touchés</div>
+                <div className="text-orange-200 text-xs leading-tight">Lecteurs<br />Touchés</div>
               </div>
             </div>
           </div>
@@ -161,7 +160,7 @@ const Hero = () => {
                     Professeur Mahougnon Kakpo
                   </h3>
                   
-                  <p className="text-blue-200 mb-4 sm:mb-8 text-sm sm:text-lg leading-relaxed">
+                  <p className="text-orange-200 mb-4 sm:mb-8 text-sm sm:text-lg leading-relaxed">
                     Académicien • Écrivain • Ministre • Député
                   </p>
                   
@@ -180,7 +179,7 @@ const Hero = () => {
                   {/* Bouton d'action optimisé mobile */}
                   <div className="mt-4 sm:mt-8">
                     <Link to="/contact">
-                      <button className="w-full bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg">
+                      <button className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg">
                         <Play className="w-4 h-4 inline mr-2" />
                         Découvrir son parcours
                       </button>
@@ -194,7 +193,7 @@ const Hero = () => {
       </div>
       
       {/* Transition optimisée */}
-      <div className="absolute bottom-0 left-0 w-full h-16 sm:h-32 bg-gradient-to-t from-white via-white/80 to-transparent"></div>
+      <div className="absolute bottom-0 left-0 w-full h-16 sm:h-32 bg-gradient-to-t from-amber-50 via-amber-50/80 to-transparent"></div>
       
       {/* Indicateur de scroll optimisé mobile */}
       <div className="absolute bottom-4 sm:bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
