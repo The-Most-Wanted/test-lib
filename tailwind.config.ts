@@ -66,6 +66,30 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				amber: {
+					50: '#fffbeb',
+					100: '#fef3c7',
+					200: '#fde68a',
+					300: '#fcd34d',
+					400: '#fbbf24',
+					500: '#f59e0b',
+					600: '#d97706',
+					700: '#b45309',
+					800: '#92400e',
+					900: '#78350f',
+				},
+				orange: {
+					50: '#fff7ed',
+					100: '#ffedd5',
+					200: '#fed7aa',
+					300: '#fdba74',
+					400: '#fb923c',
+					500: '#f97316',
+					600: '#ea580c',
+					700: '#c2410c',
+					800: '#9a3412',
+					900: '#7c2d12',
 				}
 			},
 			borderRadius: {
@@ -100,6 +124,16 @@ export default {
 						transform: 'translateY(0)'
 					}
 				},
+				'scale-in': {
+					from: {
+						opacity: '0',
+						transform: 'scale(0.9) translateY(20px)'
+					},
+					to: {
+						opacity: '1',
+						transform: 'scale(1) translateY(0)'
+					}
+				},
 				'pulse': {
 					'0%, 100%': {
 						opacity: '1',
@@ -127,6 +161,7 @@ export default {
 				'accordion-down': 'accordion-down 0.2s ease-out',
 				'accordion-up': 'accordion-up 0.2s ease-out',
 				'fade-in': 'fade-in 0.6s ease-out',
+				'scale-in': 'scale-in 0.4s ease-out',
 				'pulse': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
 				'bounce-slow': 'bounce-slow 3s infinite',
 				'float': 'float 3s ease-in-out infinite',

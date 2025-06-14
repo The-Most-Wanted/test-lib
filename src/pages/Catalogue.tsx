@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -7,13 +6,12 @@ import { useCart } from "@/contexts/CartContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { useAnalytics } from "@/hooks/useAnalytics";
 import { supabase } from "@/integrations/supabase/client";
-import { BookOpen, ShoppingCart, Eye, Star, Grid, List, Filter, Search, X, Sparkles, Calendar, User, Tag } from "lucide-react";
+import { BookOpen, ShoppingCart, Eye, Star, Grid, List, Sparkles, Calendar, User, Tag } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { toast } from "sonner";
-import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import ModernSearchBar from "@/components/ModernSearchBar";
 
 interface Book {
   id: number;
@@ -44,7 +42,7 @@ const Catalogue = () => {
   const [selectedGenre, setSelectedGenre] = useState("all");
   const [sortBy, setSortBy] = useState("title");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
-  const [showFilters, setShowFilters] = useState(false);
+  const [showSearch, setShowSearch] = useState(false);
 
   useEffect(() => {
     loadBooks();
@@ -145,19 +143,13 @@ const Catalogue = () => {
     }).format(price);
   };
 
-  const clearFilters = () => {
-    setSearchTerm("");
-    setSelectedGenre("all");
-    setSortBy("title");
-  };
-
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50">
+      <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-orange-50">
         <Navigation />
         <div className="container mx-auto px-4 py-20">
           <div className="flex flex-col items-center justify-center space-y-6">
-            <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+            <div className="w-16 h-16 border-4 border-amber-600 border-t-transparent rounded-full animate-spin"></div>
             <p className="text-gray-600 text-lg font-medium">Chargement du catalogue...</p>
           </div>
         </div>
@@ -167,16 +159,29 @@ const Catalogue = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50">
+    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-orange-50">
       <Navigation />
       
-      {/* Hero Section - Redesigned */}
-      <div className="relative bg-gradient-to-r from-indigo-900 via-purple-900 to-pink-900 py-24 overflow-hidden">
-        <div className="absolute inset-0 bg-black/30"></div>
+      {/* Modern Search Bar */}
+      <ModernSearchBar
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
+        selectedGenre={selectedGenre}
+        setSelectedGenre={setSelectedGenre}
+        sortBy={sortBy}
+        setSortBy={setSortBy}
+        genres={getUniqueGenres()}
+        isVisible={showSearch}
+        onToggle={() => setShowSearch(!showSearch)}
+      />
+      
+      {/* Hero Section with African-inspired Design */}
+      <div className="relative bg-gradient-to-r from-amber-900 via-orange-800 to-red-900 py-24 overflow-hidden">
+        <div className="absolute inset-0 bg-black/40"></div>
         <div className="absolute inset-0">
           <div className="absolute top-10 left-10 w-32 h-32 bg-yellow-400/20 rounded-full blur-3xl"></div>
-          <div className="absolute bottom-10 right-10 w-40 h-40 bg-pink-400/20 rounded-full blur-3xl"></div>
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-blue-400/10 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-10 right-10 w-40 h-40 bg-orange-400/20 rounded-full blur-3xl"></div>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-red-400/10 rounded-full blur-3xl"></div>
         </div>
         
         <div className="relative container mx-auto px-4 text-center">
@@ -190,12 +195,12 @@ const Catalogue = () => {
             
             <h1 className="font-playfair text-5xl sm:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight">
               Catalogue Littéraire
-              <span className="block text-3xl sm:text-4xl lg:text-5xl bg-gradient-to-r from-yellow-400 via-orange-400 to-pink-400 bg-clip-text text-transparent mt-4">
+              <span className="block text-3xl sm:text-4xl lg:text-5xl bg-gradient-to-r from-yellow-400 via-orange-400 to-red-400 bg-clip-text text-transparent mt-4">
                 du Professeur Mahougnon KAKPO
               </span>
             </h1>
             
-            <p className="text-xl sm:text-2xl text-blue-100 max-w-3xl mx-auto leading-relaxed mb-8">
+            <p className="text-xl sm:text-2xl text-orange-100 max-w-3xl mx-auto leading-relaxed mb-8">
               Explorez une collection exceptionnelle d'œuvres littéraires et d'essais philosophiques sur les traditions africaines et la spiritualité
             </p>
             
@@ -203,157 +208,67 @@ const Catalogue = () => {
             <div className="grid grid-cols-3 gap-8 mt-12 max-w-2xl mx-auto">
               <div className="text-center">
                 <div className="text-4xl font-bold text-white mb-2">{books.length}</div>
-                <div className="text-blue-200 text-sm uppercase tracking-wide">Ouvrages</div>
+                <div className="text-orange-200 text-sm uppercase tracking-wide">Ouvrages</div>
               </div>
               <div className="text-center">
                 <div className="text-4xl font-bold text-white mb-2">{getUniqueGenres().length}</div>
-                <div className="text-blue-200 text-sm uppercase tracking-wide">Genres</div>
+                <div className="text-orange-200 text-sm uppercase tracking-wide">Genres</div>
               </div>
               <div className="text-center">
                 <div className="text-4xl font-bold text-white mb-2">
-                  {new Date().getFullYear() - Math.min(...books.map(b => b.year))}
+                  {books.length > 0 ? new Date().getFullYear() - Math.min(...books.map(b => b.year)) : 0}
                 </div>
-                <div className="text-blue-200 text-sm uppercase tracking-wide">Années</div>
+                <div className="text-orange-200 text-sm uppercase tracking-wide">Années</div>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Modern Search & Filter Section */}
-      <div className="bg-white/95 backdrop-blur-sm shadow-lg border-b border-gray-200/50 sticky top-16 z-30">
-        <div className="container mx-auto px-4 py-6">
-          {/* Main Search Bar */}
-          <div className="relative mb-6">
-            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 h-6 w-6" />
-            <Input
-              type="text"
-              placeholder="Rechercher par titre, genre, année..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-12 pr-16 h-14 text-lg border-2 border-gray-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 rounded-2xl bg-white shadow-lg transition-all duration-300"
-            />
-            {searchTerm && (
+      {/* Results and View Toggle */}
+      <div className="bg-white/80 backdrop-blur-sm shadow-lg border-b border-orange-200/50 sticky top-16 z-30">
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex items-center justify-between">
+            <div className="text-gray-700 font-medium">
+              {filteredBooks.length} livre{filteredBooks.length > 1 ? 's' : ''} trouvé{filteredBooks.length > 1 ? 's' : ''}
+              {searchTerm && <span className="text-amber-600 ml-2">pour "{searchTerm}"</span>}
+            </div>
+
+            {/* View Mode Toggle */}
+            <div className="flex bg-amber-100 rounded-xl p-1 shadow-sm">
               <button
-                onClick={() => setSearchTerm("")}
-                className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                onClick={() => setViewMode('grid')}
+                className={`p-3 rounded-lg transition-all ${viewMode === 'grid' ? 'bg-white shadow-md text-amber-600' : 'text-gray-500 hover:text-gray-700'}`}
               >
-                <X className="h-6 w-6" />
+                <Grid className="w-5 h-5" />
               </button>
-            )}
-          </div>
-
-          {/* Filters Row */}
-          <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
-            <div className="flex flex-wrap items-center gap-4">
-              {/* Genre Filter */}
-              <Select value={selectedGenre} onValueChange={setSelectedGenre}>
-                <SelectTrigger className="w-48 h-12 border-2 border-gray-200 focus:border-indigo-500 rounded-xl bg-white shadow-sm">
-                  <Tag className="w-4 h-4 mr-2 text-gray-500" />
-                  <SelectValue placeholder="Tous les genres" />
-                </SelectTrigger>
-                <SelectContent className="bg-white/95 backdrop-blur-md border border-gray-200 rounded-xl shadow-2xl">
-                  <SelectItem value="all">Tous les genres</SelectItem>
-                  {getUniqueGenres().map(genre => (
-                    <SelectItem key={genre} value={genre}>{genre}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-
-              {/* Sort Filter */}
-              <Select value={sortBy} onValueChange={setSortBy}>
-                <SelectTrigger className="w-48 h-12 border-2 border-gray-200 focus:border-indigo-500 rounded-xl bg-white shadow-sm">
-                  <Filter className="w-4 h-4 mr-2 text-gray-500" />
-                  <SelectValue placeholder="Trier par" />
-                </SelectTrigger>
-                <SelectContent className="bg-white/95 backdrop-blur-md border border-gray-200 rounded-xl shadow-2xl">
-                  <SelectItem value="title">Titre A-Z</SelectItem>
-                  <SelectItem value="price_asc">Prix croissant</SelectItem>
-                  <SelectItem value="price_desc">Prix décroissant</SelectItem>
-                  <SelectItem value="year">Année de publication</SelectItem>
-                </SelectContent>
-              </Select>
-
-              {/* Clear Filters */}
-              {(searchTerm || selectedGenre !== "all" || sortBy !== "title") && (
-                <Button
-                  onClick={clearFilters}
-                  variant="outline"
-                  className="h-12 px-6 border-2 border-gray-300 hover:border-gray-400 rounded-xl bg-white shadow-sm"
-                >
-                  <X className="w-4 h-4 mr-2" />
-                  Effacer
-                </Button>
-              )}
-            </div>
-
-            <div className="flex items-center gap-4">
-              {/* Results Count */}
-              <div className="text-gray-600 font-medium">
-                {filteredBooks.length} livre{filteredBooks.length > 1 ? 's' : ''} trouvé{filteredBooks.length > 1 ? 's' : ''}
-              </div>
-
-              {/* View Mode Toggle */}
-              <div className="flex bg-gray-100 rounded-xl p-1 shadow-sm">
-                <button
-                  onClick={() => setViewMode('grid')}
-                  className={`p-3 rounded-lg transition-all ${viewMode === 'grid' ? 'bg-white shadow-md text-indigo-600' : 'text-gray-500 hover:text-gray-700'}`}
-                >
-                  <Grid className="w-5 h-5" />
-                </button>
-                <button
-                  onClick={() => setViewMode('list')}
-                  className={`p-3 rounded-lg transition-all ${viewMode === 'list' ? 'bg-white shadow-md text-indigo-600' : 'text-gray-500 hover:text-gray-700'}`}
-                >
-                  <List className="w-5 h-5" />
-                </button>
-              </div>
+              <button
+                onClick={() => setViewMode('list')}
+                className={`p-3 rounded-lg transition-all ${viewMode === 'list' ? 'bg-white shadow-md text-amber-600' : 'text-gray-500 hover:text-gray-700'}`}
+              >
+                <List className="w-5 h-5" />
+              </button>
             </div>
           </div>
-
-          {/* Active Filters Display */}
-          {(searchTerm || selectedGenre !== "all") && (
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="text-sm text-gray-500 mr-2">Filtres actifs:</span>
-              {searchTerm && (
-                <span className="inline-flex items-center px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full text-sm font-medium">
-                  <Search className="w-3 h-3 mr-1" />
-                  "{searchTerm}"
-                  <button onClick={() => setSearchTerm("")} className="ml-2 hover:text-indigo-600">
-                    <X className="w-3 h-3" />
-                  </button>
-                </span>
-              )}
-              {selectedGenre !== "all" && (
-                <span className="inline-flex items-center px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm font-medium">
-                  <Tag className="w-3 h-3 mr-1" />
-                  {selectedGenre}
-                  <button onClick={() => setSelectedGenre("all")} className="ml-2 hover:text-purple-600">
-                    <X className="w-3 h-3" />
-                  </button>
-                </span>
-              )}
-            </div>
-          )}
         </div>
       </div>
 
-      {/* Books Display - Completely Redesigned */}
+      {/* Books Display */}
       <div className="container mx-auto px-4 py-12">
         {filteredBooks.length === 0 ? (
           <div className="text-center py-20">
-            <div className="w-32 h-32 mx-auto mb-8 bg-gradient-to-br from-gray-100 to-gray-200 rounded-full flex items-center justify-center">
-              <BookOpen className="w-16 h-16 text-gray-400" />
+            <div className="w-32 h-32 mx-auto mb-8 bg-gradient-to-br from-amber-100 to-orange-200 rounded-full flex items-center justify-center">
+              <BookOpen className="w-16 h-16 text-amber-600" />
             </div>
             <h3 className="text-3xl font-bold text-gray-800 mb-4">Aucun livre trouvé</h3>
             <p className="text-gray-600 text-lg mb-8 max-w-md mx-auto">
               Aucun livre ne correspond à vos critères de recherche. Essayez de modifier vos filtres.
             </p>
             <Button 
-              onClick={clearFilters}
-              className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white px-8 py-3 rounded-xl font-semibold shadow-lg"
+              onClick={() => setShowSearch(true)}
+              className="bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white px-8 py-3 rounded-xl font-semibold shadow-lg"
             >
-              Voir tous les livres
+              Lancer une recherche
             </Button>
           </div>
         ) : (
@@ -364,7 +279,7 @@ const Catalogue = () => {
             {filteredBooks.map((book, index) => (
               <Card 
                 key={book.id} 
-                className={`group hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 bg-white border-0 shadow-lg hover:shadow-indigo-200/50 overflow-hidden rounded-2xl ${
+                className={`group hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 bg-white border-0 shadow-lg hover:shadow-amber-200/50 overflow-hidden rounded-2xl ${
                   viewMode === 'list' ? 'flex flex-row h-40' : ''
                 }`}
                 style={{ animationDelay: `${index * 0.05}s` }}
@@ -372,7 +287,7 @@ const Catalogue = () => {
                 {viewMode === 'grid' ? (
                   <>
                     {/* Book Cover */}
-                    <div className="aspect-[3/4] bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100 relative overflow-hidden">
+                    <div className="aspect-[3/4] bg-gradient-to-br from-amber-100 via-orange-100 to-red-100 relative overflow-hidden">
                       {book.image_url ? (
                         <img 
                           src={book.image_url} 
@@ -382,12 +297,12 @@ const Catalogue = () => {
                       ) : (
                         <div className="w-full h-full flex items-center justify-center p-6">
                           <div className="text-center">
-                            <div className="w-20 h-20 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 rounded-2xl mx-auto mb-4 flex items-center justify-center group-hover:from-purple-600 group-hover:to-pink-700 transition-all duration-500 shadow-xl group-hover:shadow-2xl transform group-hover:scale-110">
+                            <div className="w-20 h-20 bg-gradient-to-r from-amber-600 via-orange-600 to-red-600 rounded-2xl mx-auto mb-4 flex items-center justify-center group-hover:from-orange-600 group-hover:to-red-700 transition-all duration-500 shadow-xl group-hover:shadow-2xl transform group-hover:scale-110">
                               <span className="text-white text-2xl font-playfair font-bold">
                                 {(language === 'fr' ? book.title : book.title_en).charAt(0)}
                               </span>
                             </div>
-                            <h3 className="text-indigo-800 font-playfair font-bold text-lg leading-tight px-2 group-hover:text-purple-900 transition-colors">
+                            <h3 className="text-amber-800 font-playfair font-bold text-lg leading-tight px-2 group-hover:text-orange-900 transition-colors">
                               {(language === 'fr' ? book.title : book.title_en).substring(0, 50)}
                               {(language === 'fr' ? book.title : book.title_en).length > 50 ? '...' : ''}
                             </h3>
@@ -403,12 +318,6 @@ const Catalogue = () => {
                         {book.year}
                       </div>
                       
-                      {/* Featured Badge */}
-                      <div className="absolute top-4 left-4 bg-gradient-to-r from-red-500 to-pink-500 text-white px-2 py-1 rounded-full text-xs font-bold flex items-center space-x-1 opacity-0 group-hover:opacity-100 transition-all duration-500 transform -translate-y-2 group-hover:translate-y-0">
-                        <Star className="w-3 h-3" />
-                        <span>Nouveau</span>
-                      </div>
-                      
                       {/* Stock Warning */}
                       {book.stock_quantity <= 5 && book.stock_quantity > 0 && (
                         <div className="absolute bottom-4 left-4 bg-orange-500 text-white px-2 py-1 rounded-full text-xs font-bold flex items-center">
@@ -420,7 +329,7 @@ const Catalogue = () => {
                     
                     <CardContent className="p-6">
                       <div className="mb-4 flex items-center justify-between">
-                        <span className="inline-flex items-center bg-gradient-to-r from-indigo-100 to-purple-100 text-indigo-800 px-3 py-1 rounded-full text-sm font-medium border border-indigo-200/50">
+                        <span className="inline-flex items-center bg-gradient-to-r from-amber-100 to-orange-100 text-amber-800 px-3 py-1 rounded-full text-sm font-medium border border-amber-200/50">
                           <BookOpen className="w-3 h-3 mr-1" />
                           {language === 'fr' ? book.genre : book.genre_en}
                         </span>
@@ -429,7 +338,7 @@ const Catalogue = () => {
                         </span>
                       </div>
                       
-                      <h3 className="font-playfair text-lg font-bold text-gray-800 mb-2 line-clamp-2 group-hover:text-indigo-800 transition-colors">
+                      <h3 className="font-playfair text-lg font-bold text-gray-800 mb-2 line-clamp-2 group-hover:text-amber-800 transition-colors">
                         {language === 'fr' ? book.title : book.title_en}
                       </h3>
                       
@@ -452,7 +361,7 @@ const Catalogue = () => {
                       <div className="flex items-center gap-3">
                         <button
                           onClick={() => handleViewBook(book.id)}
-                          className="flex-1 group/btn relative overflow-hidden bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 hover:from-indigo-700 hover:via-purple-700 hover:to-pink-700 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-xl shadow-lg"
+                          className="flex-1 group/btn relative overflow-hidden bg-gradient-to-r from-amber-600 via-orange-600 to-red-600 hover:from-amber-700 hover:via-orange-700 hover:to-red-700 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-xl shadow-lg"
                         >
                           <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300"></div>
                           <div className="relative flex items-center justify-center space-x-2">
@@ -478,9 +387,9 @@ const Catalogue = () => {
                     </CardContent>
                   </>
                 ) : (
-                  /* List View - Redesigned */
+                  /* List View */
                   <div className="flex w-full">
-                    <div className="w-32 h-32 bg-gradient-to-br from-indigo-100 to-purple-100 flex items-center justify-center rounded-l-2xl">
+                    <div className="w-32 h-32 bg-gradient-to-br from-amber-100 to-orange-100 flex items-center justify-center rounded-l-2xl">
                       {book.image_url ? (
                         <img 
                           src={book.image_url} 
@@ -488,7 +397,7 @@ const Catalogue = () => {
                           className="w-full h-full object-cover"
                         />
                       ) : (
-                        <div className="w-16 h-16 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-xl flex items-center justify-center">
+                        <div className="w-16 h-16 bg-gradient-to-r from-amber-600 to-orange-600 rounded-xl flex items-center justify-center">
                           <span className="text-white text-xl font-playfair font-bold">
                             {(language === 'fr' ? book.title : book.title_en).charAt(0)}
                           </span>
@@ -502,7 +411,7 @@ const Catalogue = () => {
                             {language === 'fr' ? book.title : book.title_en}
                           </h3>
                           <div className="flex items-center gap-4 text-sm text-gray-500 mb-2">
-                            <span className="inline-flex items-center bg-indigo-100 text-indigo-800 px-2 py-1 rounded-full text-xs font-medium">
+                            <span className="inline-flex items-center bg-amber-100 text-amber-800 px-2 py-1 rounded-full text-xs font-medium">
                               <Tag className="w-3 h-3 mr-1" />
                               {language === 'fr' ? book.genre : book.genre_en}
                             </span>
@@ -525,7 +434,7 @@ const Catalogue = () => {
                         <div className="flex items-center gap-3">
                           <button
                             onClick={() => handleViewBook(book.id)}
-                            className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-300 flex items-center"
+                            className="bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-300 flex items-center"
                           >
                             <Eye className="w-4 h-4 mr-1" />
                             Voir
